@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <!-- garante que caracteres especiais sejam exibidos na pagina -->
+  <meta charset="UTF-8"> 
+
+  <!-- largura do layout ser correspondente ao dispositivo-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+  <!-- texto da aba do navegador -->
+  <title>EduCollab - Sistema de Provas</title> 
+
+  <!-- importa o css do bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> 
+
+  <!-- inclui o arquivo css -->
+  <link rel="stylesheet" href="style.css"> 
+
+  <!-- icones do bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <!-- biblioteca jsPDF (gera PDFs) -->
+  <script 
+    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" 
+    defer
+  ></script>
+
+</head>
+
+<body>
+  <!-- icone de livro + nome da pagina -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand">
+      <i class="bi bi-book-half me-2"></i> EduCollab - Sistema de Provas
+    </a>
+  </div>
+</nav>
+
+  <div class="container mt-4">
+    <!-- abas -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+        <!-- criar questões  -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" 
+         id="questoes-tab"  
+         data-bs-toggle="tab"
+         data-bs-target="#questoes" 
+         type="button">Criar Questões</button>
+      </li> 
+
+      <!-- gerar provas  -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" 
+         id="provas-tab"
+         data-bs-toggle="tab" 
+         data-bs-target="#provas" 
+         type="button">Gerar Provas</button>
+      </li> 
+
+      <!-- corrigir provas -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link"
+         id="corrigir-tab" 
+         data-bs-toggle="tab" 
+         data-bs-target="#corrigir" 
+         type="button">Corrigir Prova</button>
+      </li> 
+    </ul>
+
+    <div class="tab-content mt-3">
+
+      <!-- aba criar questoes  -->
+      <div class="tab-pane fade show active" id="questoes"> <!-- painel de conteudo especifico - questoes -->
+        <div class="card p-3"> <!-- estilo de um cartao, conteudo nao fica colado nas bordas  -->
+          <h5>Adicionar Questão</h5>
+          <form id="questaoForm"> <!-- identificador do formulario criado para salvar os dados  -->
+            <input type="text" id="enunciado" class="form-control mb-2" placeholder="Enunciado da questão" required>
+            <input type="text" class="form-control mb-2 alternativa" placeholder="Alternativa A" required>
+            <input type="text" class="form-control mb-2 alternativa" placeholder="Alternativa B" required>
+            <input type="text" class="form-control mb-2 alternativa" placeholder="Alternativa C" required>
+            <input type="text" class="form-control mb-2 alternativa" placeholder="Alternativa D" required>
+            <select id="respostaCorreta" class="form-select mb-2" required>
+              <option value="">Resposta correta...</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Adicionar</button>
+          </form>
+        </div>
+        <h5>Questões cadastradas:</h5>
+        <div id="listaQuestoes"></div> <!-- JS preenche com a lista de questoes que forem cadastradas -->
+      </div>
+
+      <!-- aba gerar provas -->
+     <div class="tab-pane fade" id="provas">
+  <div class="card p-3 mb-3">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <label for="numProvas" class="form-label"><strong>Quantidade de provas:</strong></label>
+        <input type="number" id="numProvas" class="form-control" value="1" min="1">
+      </div>
+      <div class="col-md-3">
+        <label for="numQuestoesPorProva" class="form-label"><strong>Questões por prova:</strong></label>
+        <input type="number" id="numQuestoesPorProva" class="form-control" value="5" min="1">
+      </div>
+      <div class="col-md-3">
+        <button id="gerarProvasBtn" class="btn btn-success w-100">Gerar Provas</button>
+      </div>
+    </div>
+  </div>
+  <div id="provasContainer"></div>
+</div>
+
+      <!-- aba corrigir prova -->
+      <div class="tab-pane fade" id="corrigir">
+        <div class="card p-3">
+          <h5>Corrigir Prova</h5>
+          <form id="correcaoForm">
+            <input type="text" id="codigoProva" class="form-control mb-2" placeholder="Código da prova" required>
+            <div id="respostasAluno"></div>
+            <button type="submit" class="btn btn-primary mt-2">Corrigir</button>
+          </form>
+          <h5 class="mt-3">Nota: <span id="nota"></span></h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="scriptProvas.js"></script>
+
+</body>
+</html>

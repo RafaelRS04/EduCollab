@@ -1,0 +1,89 @@
+<!-- Pagina inicial professor -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduCollab - Página do Professor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container d-flex justify-content-between align-items-center">
+            <!-- Perfil do Professor -->
+            <div class="d-flex align-items-center">
+                <img id="fotoPerfil" src="https://via.placeholder.com/40" alt="Foto do Professor"
+                    class="rounded-circle me-2" style="width:40px; height:40px; object-fit:cover;">
+                <a href="perfil_professor.html" id="nomePerfil" class="navbar-brand mb-0">
+                    Professor
+                </a>
+            </div>
+
+
+
+            <!-- Logo -->
+            <span class="navbar-text text-white fw-bold">
+                EduCollab - Professor
+            </span>
+        </div>
+    </nav>
+
+    <!-- Conteudo da pagina -->
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2>Bem-vindo ao Painel do Professor</h2>
+            <p class="text-muted">Escolha uma das funcionalidades abaixo para começar:</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Sistema de provas -->
+            <div class="col-md-4">
+                <div class="card p-4 text-center shadow-sm h-100">
+                    <i class="bi bi-book-half display-3 mb-3 text-primary"></i>
+                    <h5>Sistema de Provas</h5>
+                    <p class="text-muted">Crie questões, gere provas personalizadas e corrija automaticamente.</p>
+                    <a href="provas.html" class="btn btn-primary mt-2">Acessar</a>
+                </div>
+            </div>
+
+            <!-- Forum de professores -->
+            <div class="col-md-4">
+                <div class="card p-4 text-center shadow-sm h-100">
+                    <i class="bi bi-chat-dots-fill display-3 mb-3 text-success"></i>
+                    <h5>Fórum de Professores</h5>
+                    <p class="text-muted">Compartilhe experiências, dúvidas e materiais com colegas.</p>
+                    <a href="forum_professores.html" class="btn btn-success mt-2">Acessar</a>
+                </div>
+            </div>
+
+            <!-- Banco de questoes -->
+            <div class="col-md-4">
+                <div class="card p-4 text-center shadow-sm h-100">
+                    <i class="bi bi-collection display-3 mb-3 text-warning"></i>
+                    <h5>Banco de Questões</h5>
+                    <p class="text-muted">Adicione e organize suas questões em um banco centralizado e crie testes para seus alunos estudarem.</p>
+                    <a href="banco_questoes.html" class="btn btn-warning mt-2 text-white">Acessar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scriptPerfil.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="perfil_professor.html"></script>
+    <script>
+        // Carregar perfil ao abrir home
+        carregarPerfil();
+    </script>
+</body>
+
+</html>
