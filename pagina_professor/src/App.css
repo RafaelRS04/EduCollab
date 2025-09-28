@@ -1,0 +1,272 @@
+/* =================================================================
+   ESTILIZAÇÃO GLOBAL REFINADA
+   ================================================================= */
+:root {
+  --purple-dark: #4C1D95;
+  --purple-base: #5B21B6;
+  --purple-light: #8B5CF6;
+  --green-dark: #047857;
+  --green-base: #059669;
+  --gray-text: #4B5563;
+  --gray-light: #F3F4F6; /* Cinza para fundos de elementos */
+  --gray-border: #E5E7EB;
+  --background: #F9FAFB; /* Fundo principal da página */
+  --white: #ffffff;
+  --text-dark: #111827;
+  --text-light: #6B7280; /* Texto secundário mais suave */
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--gray-text);
+}
+
+h1, h2, h3, h4, h5, h6 { color: var(--text-dark); font-weight: 600; }
+
+.page-container {
+  max-width: 1200px; /* Um pouco mais de espaço */
+  margin: 0 auto;
+  padding: 2rem; /* Mais respiro nas laterais */
+}
+
+/* =================================================================
+   COMPONENTES REFINADOS
+   ================================================================= */
+.form-label { font-weight: 500; color: var(--text-dark); margin-bottom: 0.5rem; }
+.form-control, .form-select {
+  border-radius: 8px !important;
+  border: 1px solid var(--gray-border) !important;
+  padding: 0.75rem 1rem !important;
+  box-shadow: none !important;
+  background-color: var(--white) !important;
+  color: var(--gray-text) !important;
+  transition: border-color 0.2s ease;
+}
+.form-control:focus, .form-select:focus { border-color: var(--purple-base) !important; }
+
+.btn {
+  border-radius: 8px !important;
+  font-weight: 600 !important; /* Botões mais destacados */
+  padding: 0.8rem 1.5rem !important;
+  border: none !important;
+  transition: all 0.2s ease-in-out;
+}
+.btn:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+.btn-primary { background-color: var(--purple-base) !important; color: var(--white) !important; }
+.btn-primary:hover { background-color: var(--purple-dark) !important; }
+.btn-success { background-color: var(--green-base) !important; color: var(--white) !important; }
+.btn-success:hover { background-color: var(--green-dark) !important; }
+.btn-danger { background-color: #EF4444 !important; color: var(--white) !important; }
+.btn-danger:hover { background-color: #DC2626 !important; }
+
+.card {
+  background-color: var(--white);
+  border-radius: 20px !important; /* Bordas mais suaves */
+  border: 1px solid var(--gray-border) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 4px 10px rgba(0,0,0,0.05) !important; /* Sombra mais sutil */
+  margin-bottom: 1.5rem;
+  padding: 2.5rem; /* Mais espaçamento interno */
+}
+
+/* =================================================================
+   LAYOUT PRINCIPAL E HEADER
+   ================================================================= */
+.main-header {
+  background-color: var(--white);
+  border-bottom: 1px solid var(--gray-border);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+.header-logo .logo-icon { background-color: var(--purple-base); color: var(--white); font-weight: bold; width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; font-size: 1.25rem; }
+.header-logo .logo-text { font-size: 1.5rem; font-weight: 700; color: var(--text-dark); }
+.header-profile { display: flex; align-items: center; gap: 1rem; }
+.profile-info { text-align: right; }
+.profile-info .name { font-weight: 600; color: var(--text-dark); }
+.profile-info .role { font-size: 0.875rem; color: var(--text-light); }
+.profile-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gray-border); }
+.profile-settings i { font-size: 1.5rem; color: var(--text-light); transition: color 0.2s ease; }
+.profile-settings:hover i { color: var(--text-dark); }
+
+/* CABEÇALHO DA PÁGINA */
+.page-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2.5rem; }
+.page-header-icon { background-color: var(--white); border-radius: 12px; border: 1px solid var(--gray-border); width: 60px; height: 60px; display: grid; place-items: center; }
+.page-header-icon i { font-size: 1.75rem; color: var(--purple-base); }
+.page-header-title h2 { margin: 0; font-size: 2rem; font-weight: 700; }
+.page-header-title p { margin: 0.25rem 0 0 0; color: var(--text-light); font-size: 1.1rem; }
+
+/* ABAS (TABS) */
+.tabs-container { background-color: var(--gray-light); border-radius: 12px; padding: 0.5rem; display: flex; justify-content: space-around; margin-bottom: 2.5rem; }
+.tab-button { flex: 1; padding: 0.75rem 1rem; border: none; background-color: transparent; border-radius: 8px; font-weight: 600; font-size: 1rem; color: var(--text-light); cursor: pointer; transition: all 0.2s ease; }
+.tab-button.active { background-color: var(--white); color: var(--purple-base); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+/* ESTADO VAZIO */
+.empty-state { text-align: center; padding: 3rem 2rem; border: 2px dashed var(--gray-border); border-radius: 12px; }
+.empty-state i { font-size: 3rem; color: var(--gray-border); margin-bottom: 1rem; }
+.empty-state h5 { font-weight: 600; color: var(--text-dark); }
+.empty-state p { color: var(--text-light); max-width: 350px; margin: 0.5rem auto 0; }
+
+/* FÓRUM */
+.comment { background-color: var(--gray-light); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.75rem; }
+.commentForm { display: flex; gap: 0.5rem; }
+.commentForm .form-control { flex-grow: 1; }
+
+/* =================================================================
+    ESTILOS PARA A HOME PAGE (HERO E CARDS)
+   ================================================================= */
+
+/* Seção de Boas-Vindas (Hero) */
+.hero-section {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.hero-badge {
+  display: inline-block;
+  background-color: var(--gray-light);
+  border: 1px solid var(--gray-border);
+  border-radius: 999px; /* Formato de pílula */
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+.hero-subtitle-gradient {
+  /* Efeito de gradiente no texto, usando as cores do nosso tema */
+  background: linear-gradient(45deg, var(--purple-base), var(--purple-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.hero-description {
+  font-size: 1.125rem;
+  color: var(--text-light);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Seção dos Cards de Funcionalidade */
+.function-cards-section {
+  padding: 2rem 0;
+}
+
+.function-card {
+  background-color: var(--white);
+  border: 1px solid var(--gray-border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease-in-out;
+}
+
+.function-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.07);
+}
+
+.function-card .card-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.function-card .card-title-func {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.function-card .card-description-func {
+  color: var(--text-light);
+  flex-grow: 1; /* Empurra o botão para baixo */
+  margin-bottom: 1.5rem;
+}
+
+/* Cores específicas dos novos cards */
+.card-provas {
+  border-top: 4px solid var(--purple-base);
+}
+.card-provas .card-icon, .card-provas .card-title-func {
+  color: var(--purple-base);
+}
+
+.card-forum {
+  border-top: 4px solid var(--green-base);
+}
+.card-forum .card-icon, .card-forum .card-title-func {
+  color: var(--green-base);
+}
+
+/* =================================================================
+   ESTILOS PARA O CARD BANCO DE QUESTÕES
+   ================================================================= */
+
+.card-banco {
+  border-top: 4px solid #D97706;
+}
+.card-banco .card-icon, .card-banco .card-title-func {
+  color: #B45309;
+}
+.btn-banco {
+  background-color: #D97706 !important;
+  color: white !important;
+}
+.btn-banco:hover {
+  background-color: #B45309 !important;
+}
+
+/* =================================================================
+   ESTILOS PARA FEEDBACK DA CORREÇÃO
+   ================================================================= */
+
+.correction-detail-item {
+  background-color: var(--background);
+  border: 1px solid var(--gray-border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.feedback-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.feedback-certo {
+  background-color: #D1FAE5; /* Verde claro */
+  color: #065F46; /* Verde escuro */
+}
+
+.feedback-errado {
+  background-color: #FEE2E2; /* Vermelho claro */
+  color: #991B1B; /* Vermelho escuro */
+}
+
+.feedback-correta {
+  background-color: var(--gray-light);
+  color: var(--gray-text);
+}
+
