@@ -76,5 +76,5 @@ A página foi projetada para apresentar o EduCollab a novos usuários e permitir
 └── script.js        # Lógica de interatividade e validação dos formulários
 ```
 
-📌 Observações
+## 📌 Observações
 Esta é a versão estática da Landing Page. Os processos de login e cadastro são simulações implementadas com JavaScript e não possuem, no momento, integração com um back-end ou banco de dados.
