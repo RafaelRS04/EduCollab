@@ -81,10 +81,3 @@ Esta versão utiliza **Bootstrap** e **Font Awesome** via CDN para agilizar a es
 
 A aplicação agora deve estar rodando!
 
----
-### 📝 Resumo do Processo
-1.  Crie um novo projeto **React + Vite**.
-2.  **Substitua** a pasta `src` padrão pela pasta `src` deste projeto.
-3.  Edite o arquivo `index.html` na raiz para **adicionar os links CDN** do Bootstrap e Font Awesome.
-4.  Rode `npm install`.
-5.  Rode `npm run dev`.
