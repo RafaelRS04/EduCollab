@@ -1,11 +1,6 @@
-# 📚 EduCollab - Página do Professor  
+# 📚 EduCollab
 
-Este repositório contém a versão da **página do professor** da aplicação web **EduCollab**, desenvolvida utilizando **Bootstrap, HTML e CSS**.  
-
-A página foi projetada para oferecer ao professor acesso às principais funcionalidades do sistema:  
-- 📝 **Gerar Prova**: criação de avaliações de forma simples e organizada.  
-- 💬 **Fórum de Professores**: espaço de comunicação e troca de experiências entre docentes.  
-- 📂 **Banco de Questões**: armazenamento e consulta de questões para compor provas.  
+Este repositório contém a versão da aplicação web **EduCollab**, desenvolvida utilizando **Bootstrap, HTML e CSS**.
 
 ---
 
@@ -18,15 +13,24 @@ A página foi projetada para oferecer ao professor acesso às principais funcion
 
 ## 📂 Estrutura do Projeto  
 ```bash
-pagina_professor/
-├── home_professor.html         # Página principal
-├── forum_professores.html         # Página de fórum entre professores
-├── perfil_professor.html         # Página do perfil do professor
-├── provas.html         # Página referente a provas: criar questão, crier prova e corrigir prova
-├── scriptForum.js       # Script da página de fórum
-├── scriptPerfil.js       # Script da página de perfil
-├── scriptProvas.js       # Script da página de provas
-├── style.css       # Style global de todas as páginas
+src/
+├── index.html  # Página principal
+├── banco_questoes_aluno.html   # Página do banco de questões na visão do aluno
+├── banco_questoes_professor.html   # Página do banco de questões na visão do professor
+├── banco_questoes_aluno.html   # Página do fórum de dúvidas
+├── forum_professores.html  # Página de fórum entre professores
+├── home_professor.html     # Página principal do professor
+├── perfil_professor.html   # Página do perfil do professor
+├── provas.html     # Página referente a provas: criar questão, crier prova e corrigir prova
+├── script.js   # Script da homepage
+├── scriptBancoQuestoes.js   # Script do banco de questões
+├── scriptForum.js  # Script da página de fórum
+├── scriptForumDuvidas.js  # Script da página do fórum de dúvidas
+├── scriptPerfil.js     # Script da página de perfil
+├── scriptProvas.js     # Script da página de provas
+├── style_professor.css   # Style da homepage e banco de questões
+├── style.css   # Style da homepage e banco de questões
+├── topico_detalhe.html   # Página detalhada para tópicos do fórum de dúvidas
 ```
 ---
 ## ▶️ Como Visualizar
@@ -38,21 +42,21 @@ git clone https://github.com/RafaelRS04/EduCollab.git
 ```
 Acesse a pasta do projeto:
 ```bash
-cd EduCollab/pagina_professor
+cd EduCollab/src
 ```
-Abra o arquivo **home_professor.html** no seu navegador.
-
+Abra o arquivo **index.html** no seu navegador.
 
 ---
 ## 📌 Observações
 
-Esta é a versão estática da página do professor (HTML, CSS e Bootstrap).
+Esta é a versão estática das páginas do projeto (HTML, CSS e Bootstrap).
 
 Futuras versões podem incluir integração com backend e funcionalidades dinâmicas.
 
 ---------------------------------------------------------------------------------
+
 ## 🌎 EduCollab - Página Principal (Landing Page)
-Esta parte do repositório contém a página principal (Landing Page) da aplicação, que serve como porta de entrada para a plataforma. Foi desenvolvida com HTML, CSS e JavaScript puro.
+A página principal (Landing Page) da aplicação serve como porta de entrada para a plataforma. Algumas páginas ainda não possuem links de acesso através da landing page.
 
 A página foi projetada para apresentar o EduCollab a novos usuários e permitir o acesso ou registro na plataforma.
 
@@ -68,13 +72,19 @@ A página foi projetada para apresentar o EduCollab a novos usuários e permitir
 
 - Navegação Suave: Efeito de rolagem suave para as âncoras internas da página.
 
-📂 Estrutura do Projeto
-```Bash
-
-├── index.html       # Estrutura principal da página de apresentação
-├── style.css        # Folha de estilos customizada
-└── script.js        # Lógica de interatividade e validação dos formulários
-```
-
-## 📌 Observações
+### 📌 Observações
 Esta é a versão estática da Landing Page. Os processos de login e cadastro são simulações implementadas com JavaScript e não possuem, no momento, integração com um back-end ou banco de dados.
+
+## 📚 EduCollab - Página do Professor  
+
+A página foi projetada para oferecer ao professor acesso às principais funcionalidades do sistema:  
+- 📝 **Gerar Prova**: criação de avaliações de forma simples e organizada.  
+- 💬 **Fórum de Professores**: espaço de comunicação e troca de experiências entre docentes.  
+- 📂 **Banco de Questões**: armazenamento e consulta de questões para compor provas.
+
+## 🏦 EduCollab - Banco de questões e fórum de dúvidas 
+
+As páginas foram projetadas para oferecer funcionalidades como:  
+- 📝 **Cadastro de questões**: permite o professor cadastrar questões para os alunos.  
+- 💬 **Teste de conhecimento**: fornece aos alunos as questões dos professores.  
+- 📂 **Troca de dúvidas**: no fórum é possível discutir sobre dúvidas.

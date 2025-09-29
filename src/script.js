@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('teacherArea').addEventListener('change', checkFormValidity);
     document.getElementById('teacherLevel').addEventListener('change', checkFormValidity);
 
-    // 🚀 Register form submission
+    // Register form submission
     document.getElementById('registerForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Dados do cadastro:', formData);
         alert(`Cadastro realizado com sucesso!\nBem-vindo(a), ${formData.name}!\nTipo: ${selectedUserType === 'student' ? 'Aluno' : 'Professor'}`);
 
-        // 🚀 Redireciona conforme tipo
+        // Redireciona conforme tipo
         if (selectedUserType === 'teacher') {
             window.location.href = "home_professor.html";
         } else {
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 🚀 Login form submission
+    // Login form submission
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         alert(`Login realizado com sucesso!\nEmail: ${email}`);
 
-        // 🚀 Direcionar para home do professor (exemplo)
+        // Direcionar para home do professor (exemplo)
         window.location.href = "home_professor.html";
 
         // Close modal
