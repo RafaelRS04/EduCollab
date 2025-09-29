@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduCollab - Banco de Questões para Estudo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-graduation-cap me-2"></i>EduCollab
+            </a>
+            <span class="navbar-text fw-bold">
+                Questões para Estudo
+            </span>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Teste seus conhecimentos!</h2>
+            <p class="lead text-muted">Resolva as questões cadastradas pelos professores e prepare-se para as provas.</p>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <input type="text" id="filtroMateria" class="form-control" placeholder="Filtrar por matéria...">
+            </div>
+        </div>
+        
+        <div id="questoesAlunoContainer" class="row g-4">
+            </div>
+    </div>
+
+    <script src="scriptBancoQuestoes.js"></script>
+    <script>
+        // Chama a função para carregar a visão do aluno
+        document.addEventListener('DOMContentLoaded', carregarQuestoesAluno);
+    </script>
+</body>
+</html>
