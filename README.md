@@ -1,6 +1,6 @@
 # 📚 EduCollab
 
-Este repositório contém a versão da aplicação web **EduCollab**, desenvolvida utilizando **Bootstrap, HTML e CSS**.
+Este repositório contém a versão estática da aplicação web **EduCollab**, desenvolvida utilizando **Bootstrap, HTML e CSS**.
 
 ---
 
@@ -86,5 +86,8 @@ A página foi projetada para oferecer ao professor acesso às principais funcion
 
 As páginas foram projetadas para oferecer funcionalidades como:  
 - 📝 **Cadastro de questões**: permite o professor cadastrar questões para os alunos.  
-- 💬 **Teste de conhecimento**: fornece aos alunos as questões dos professores.  
-- 📂 **Troca de dúvidas**: no fórum é possível discutir sobre dúvidas.
+- 🧠 **Teste de conhecimento**: fornece aos alunos as questões dos professores.  
+- 💬 **Troca de dúvidas**: no fórum é possível discutir sobre dúvidas.
+
+### 📌 Observações
+A visão do aluno do banco de questões e o fórum de dúvidas ainda não podem ser acessados dentro da aplicação.
