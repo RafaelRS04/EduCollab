@@ -67,8 +67,6 @@ Para rodar este projeto em sua máquina, siga os passos abaixo:
     npm start
     ```
 
-5.  **Abra no navegador:**
-    Acesse [http://localhost:3000](http://localhost:3000) para ver a aplicação funcionando.
 
 ## 📂 Estrutura de Arquivos
 
@@ -89,6 +87,4 @@ educollab-react-unificado/
     └── *.css            # Arquivos de estilo.
 ```
 
-## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
