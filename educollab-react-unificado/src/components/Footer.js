@@ -10,12 +10,13 @@ const Footer = () => {
                         <p className="mb-0">Transformando a educação através da colaboração.</p>
                     </div>
                     <div className="col-md-6 text-md-end">
-                        <p className="mb-0">&copy; 2024 EduCollab. Todos os direitos reservados.</p>
+                        <p className="mb-0">&copy; 2025 EduCollab. Todos os direitos reservados.</p>
                     </div>
                 </div>
             </div>
         </footer>
     );
 };
+
 
 export default Footer;
