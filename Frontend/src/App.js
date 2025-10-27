@@ -16,8 +16,11 @@ import AlunoHome from './pages/aluno/AlunoHome';
 import BancoQuestoesAluno from './pages/aluno/BancoQuestoesAluno';
 
 // Páginas do Fórum
-import ForumDuvidas from './pages/forum/ForumDuvidas';
-import TopicoDetalhe from './pages/forum/TopicoDetalhe';
+import ForumDuvidasAluno from './pages/forumAluno/ForumDuvidasAluno';
+import TopicoDetalheAluno from './pages/forumAluno/TopicoDetalheAluno';
+
+import ForumDuvidasProfessor from './pages/forumProfessor/ForumDuvidasProfessor';
+import TopicoDetalheProfessor from './pages/forumProfessor/TopicoDetalheProfessor';
 
 function App() {
   return (
@@ -37,16 +40,18 @@ function App() {
         <Route path="/professor/perfil" element={<ProfessorPerfil />} />
         <Route path="/professor/banco-questoes" element={<BancoQuestoesProfessor />} />
         <Route path="/professor/provas" element={<SistemaProvas />} />
-        <Route path="/professor/forum" element={<ForumDuvidas />} />
+        <Route path="/professor/forumProfessor" element={<ForumDuvidasProfessor />} />
 
          {/* Rotas do Aluno */}
         <Route path="/aluno/home" element={<AlunoHome />} /> 
         <Route path="/aluno/banco-questoes" element={<BancoQuestoesAluno />} />
-        <Route path="/aluno/forum" element={<ForumDuvidas />} />
+        <Route path="/aluno/forumAluno" element={<ForumDuvidasAluno />} />
 
-        {/* Rotas do Fórum (acessíveis de forma geral) */}
-        <Route path="/forum" element={<ForumDuvidas />} />
-        <Route path="/forum/topico/:id" element={<TopicoDetalhe />} />
+         {/* Rotas do Fórum  */}
+        <Route path="/forumAluno" element={<ForumDuvidasAluno />} />
+        <Route path="/forum/topico/:id" element={<TopicoDetalheAluno />} />
+        <Route path="/forumProfessor" element={<ForumDuvidasProfessor />} />
+        <Route path="/forum/topico/:id" element={<TopicoDetalheProfessor />} />
       </Routes>
     </Router>
   );
