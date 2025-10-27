@@ -1,4 +1,3 @@
-/* Define a cor primária (roxo) do seu protótipo original */
 :root {
   --primary-color: #551595;
   --secondary-color: #c9c5cc;
@@ -10,7 +9,6 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  /* Usa o mesmo gradiente do seu protótipo original */
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -23,7 +21,7 @@
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 700px; /* Largura máxima para o formulário */
+  max-width: 700px;
 }
 
 .register-title {
@@ -35,7 +33,7 @@
 
 /* Mensagem de erro (Ex: "Email já cadastrado") */
 .register-error-message {
-  color: #D9534F; /* Um tom de vermelho */
+  color: #D9534F;
   background-color: #fddede;
   border: 1px solid #D9534F;
   border-radius: 8px;
@@ -45,8 +43,6 @@
 }
 
 /* --- Estilos do Seletor de Tipo de Usuário --- */
-/* (Baseado no seu protótipo HTML original) */
-
 .user-type-selector {
   display: flex;
   gap: 15px;
@@ -67,7 +63,7 @@
 
 .user-type-card:hover {
   border-color: var(--primary-color);
-  background-color: #f3e5f5; /* Um roxo bem claro */
+  background-color: #f3e5f5;
   transform: translateY(-3px);
 }
 
@@ -93,7 +89,6 @@
   border: 1px solid #e5e7eb;
 }
 
-/* --- Estilos Gerais do Formulário (Sobrescreve Bootstrap) --- */
 .form-group {
   margin-bottom: 1.25rem;
 }
@@ -103,7 +98,6 @@
   margin-bottom: 0.5rem;
 }
 
-/* Arredonda os inputs e selects */
 .form-control,
 .form-select {
   border-radius: 8px;
@@ -128,7 +122,7 @@
 }
 
 .btn-primary:hover {
-  background-color: #4a1181; /* Roxo mais escuro */
+  background-color: #4a1181; 
   border-color: #4a1181;
   transform: translateY(-2px);
 }
@@ -139,4 +133,5 @@
   border-color: #ccc;
   cursor: not-allowed;
 }
+
 
