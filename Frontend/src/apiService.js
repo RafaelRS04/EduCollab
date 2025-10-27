@@ -1,10 +1,8 @@
-// Define a URL base da sua API (onde o FastAPI está rodando)
+// Define a URL base da sua API
 const API_URL = 'http://127.0.0.1:8000';
 
 /**
  * Função para fazer Login.
- * O endpoint /token do FastAPI espera dados de formulário (x-www-form-urlencoded),
- * não JSON. Por isso, usamos URLSearchParams.
  */
 export const loginUser = async (email, password) => {
     // 1. Formata os dados para o padrão de formulário
@@ -33,12 +31,8 @@ export const loginUser = async (email, password) => {
 
 /**
  * Função para fazer o Cadastro.
- * O endpoint /register espera dados em JSON, então é mais simples.
  */
 export const registerUser = async (userData) => {
-    // userData deve ser um objeto, ex:
-    // { email: "...", password: "...", user_type: "student", level: "ensino-medio" }
-    
     console.log("Tentando cadastrar:", userData); // Log para debug
 
     const response = await fetch(`${API_URL}/register`, {
@@ -79,4 +73,5 @@ export const getUserProfile = async (token) => {
     }
 
     return await response.json();
+
 };
