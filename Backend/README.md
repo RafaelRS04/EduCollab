@@ -33,13 +33,37 @@ O arquivo `main.py` implementa os seguintes recursos essenciais:
 
 ## 🛠️ Como Executar
 
-1.  **Instalar Dependências:**
+1.  **Criar Ambiente Virtual:**
     Certifique-se de ter o Python 3.9+ instalado. No terminal, dentro desta pasta, execute:
     ```bash
-    pip install "fastapi[all]" uvicorn bcrypt "PyJWT[cryptography]" python-multipart
+    python -m venv .env
+    ```
+    
+2.  **Ativar Ambiente Virtual:**
+    Esta etapa pode variar de plataforma para plataforma, sendo comum em ambientes POSIX:
+    ```bash
+    source .env/bin/activate
+    ```
+    E em sistemas Windows:
+
+    ```bash
+    .env\Scripts\activate.bat
     ```
 
-2.  **Iniciar o Servidor:**
+    Se necessário, veja mais informações em [venv — Creation of virtual environments](https://docs.python.org/3/library/venv.html).
+
+3.  **Instalar Dependências:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+    Serão instalados os seguintes pacotes, assim como suas dependências:
+    * `fastapi[all]`: Framework web de alta performance para construir APIs.
+    * `uvicorn`: Servidor ASGI para executar o FastAPI.
+    * `bcrypt`: Biblioteca para hashing (armazenamento seguro) de senhas.
+    * `PyJWT[cryptography]`: Para criação e verificação de tokens JWT (autenticação).
+    * `python-multipart`: Utilizado pelo FastAPI para processar uploads de arquivos.
+
+4.  **Iniciar o Servidor:**
     ```bash
     uvicorn main:app --reload
     ```
@@ -47,7 +71,7 @@ O arquivo `main.py` implementa os seguintes recursos essenciais:
     * `app`: Refere-se à instância `FastAPI()` criada no arquivo.
     * `--reload`: Reinicia o servidor automaticamente após salvar alterações no código.
 
-3.  **Acessar a API:**
+5.  **Acessar a API:**
     * A API estará disponível em: `http://127.0.0.1:8000`
     * A documentação interativa (Swagger UI) estará em: `http://127.0.0.1:8000/docs`
 
