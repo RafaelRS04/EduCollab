@@ -10,9 +10,7 @@ from datetime import datetime, timedelta
 # -----------------------------------------------------
 # 1. CONFIGURAÇÃO DE SEGURANÇA (Tokens JWT)
 # -----------------------------------------------------
-# IMPORTANTE: Mude esta chave! Gere uma chave complexa para produção.
-# Use: import os; os.urandom(32).hex() no terminal python
-SECRET_KEY = "sua-chave-secreta-muito-forte-aqui" 
+SECRET_KEY = "chave-secreta-muito-forte-que-nao-serve-pra-nada-por-que-e-teste" 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30 # O token expira em 30 minutos
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -20,8 +18,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 # -----------------------------------------------------
 # 2. SIMULAÇÃO DO BANCO DE DADOS
 # -----------------------------------------------------
-# Em um projeto real, isso seria um banco de dados (PostgreSQL, MongoDB, etc.)
-# A chave do dicionário será o email do usuário.
 fake_users_db = {}
 
 # -----------------------------------------------------
@@ -121,13 +117,13 @@ app = FastAPI(
 
 # Define de quais origens (URLs) o Backend aceitará requisições
 origins = [
-    "http://localhost:3000",  # A URL padrão do seu app React
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,  # Permite as origens da lista
-    allow_credentials=True, # Permite cookies (útil para o futuro)
+    allow_credentials=True, # Permite cookies
     allow_methods=["*"],    # Permite todos os métodos (GET, POST, etc.)
     allow_headers=["*"],    # Permite todos os cabeçalhos
 )
@@ -165,12 +161,11 @@ async def register_user(user: UserCreate):
     )
 
     # 4. "Salva" o usuário no nosso "DB"
-    # (user_in_db.dict() converte o objeto pydantic para um dicionário python)
     fake_users_db[user.email] = user_in_db.dict()
     
     print("Novo usuário cadastrado:", fake_users_db[user.email])
 
-    # 5. Cria um Token de acesso para o usuário (Login automático)
+    # 5. Cria um Token de acesso para o usuário
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.email, "user_type": user.user_type},
@@ -196,8 +191,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
     # 2. Verifica se o usuário existe E se a senha está correta
     if not user or not verify_password(form_data.password, user["hashed_password"]):
-        # Se o usuário não existe OU a senha está errada, damos a mesma
-        # mensagem de erro por segurança (para não informar se foi o email ou a senha que errou).
+        # Se o usuário não existe OU a senha está errada, mesma mensagem de erro
         raise HTTPException(
             status_code=401, # 401 Unauthorized
             detail="Email ou senha incorretos",
@@ -227,10 +221,8 @@ async def read_users_me(current_user: dict = Depends(get_current_user)):
     Só pode ser acessado por um usuário com um token válido.
     Retorna as informações do usuário que está logado.
     """
-    # Se o código chegou até aqui, a função get_current_user
-    # foi executada com sucesso e 'current_user' contém os dados do usuário.
 
-    # Por segurança, removemos o hash da senha antes de retornar
+    # Por segurança, remove o hash da senha antes de retornar
     user_info = current_user.copy()
     user_info.pop("hashed_password", None) 
 
