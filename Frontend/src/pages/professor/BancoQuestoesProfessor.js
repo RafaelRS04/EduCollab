@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../../components/Footer';
-import QuestaoCard from '../../components/QuestaoCard'; 
+import QuestaoCard from '../../components/QuestaoCard';
+import { getQuestions, createQuestion, deleteQuestion } from '../../apiService.js';
 
 const BancoQuestoesProfessor = () => {
     const [questoes, setQuestoes] = useState([]);
@@ -9,14 +10,26 @@ const BancoQuestoesProfessor = () => {
         materia: '',
         enunciado: '',
         alternativas: ['', '', '', ''],
-        resposta: ''
+        resposta: '',
     });
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        const questoesSalvas = localStorage.getItem('bancoQuestoes');
-        if (questoesSalvas) {
-            setQuestoes(JSON.parse(questoesSalvas));
-        }
+        const fetchQuestoes = async () => {
+            try {
+                const token = localStorage.getItem('token')
+                const data = await getQuestions(token); 
+                setQuestoes(data);
+            } catch (error) {
+                console.error("Erro ao buscar questões:", error);
+                alert("Não foi possível carregar suas questões.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchQuestoes();
     }, []);
 
     const handleChange = (e) => {
@@ -30,20 +43,42 @@ const BancoQuestoesProfessor = () => {
         setNovaQuestao(prevState => ({ ...prevState, alternativas: novasAlternativas }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const questoesAtualizadas = [...questoes, novaQuestao];
-        setQuestoes(questoesAtualizadas);
-        localStorage.setItem('bancoQuestoes', JSON.stringify(questoesAtualizadas));
-        alert('Questão salva com sucesso!');
-        setNovaQuestao({ materia: '', enunciado: '', alternativas: ['', '', '', ''], resposta: '' });
+        try {
+            // A API recebe a nova questão
+            const token = localStorage.getItem('token')
+            const data = await createQuestion(token, novaQuestao); 
+            
+            // Retorna a questão salva (com seu ID do banco de dados)
+            const questaoSalva = data; 
+
+            // Adiciona a nova questão ao estado local (evita re-buscar tudo)
+            setQuestoes(prevQuestoes => [...prevQuestoes, questaoSalva]);
+            
+            alert('Questão salva com sucesso!');
+            setNovaQuestao({ materia: '', enunciado: '', alternativas: ['', '', '', ''], resposta: '' });
+        
+        } catch (error) {
+            console.error("Erro ao salvar questão:", error);
+            alert("Erro ao salvar. Tente novamente.");
+        }
     };
 
-    const removerQuestao = (indexParaRemover) => {
+    const removerQuestao = async (idParaRemover) => {
         if (window.confirm('Tem certeza que deseja excluir esta questão?')) {
-            const questoesAtualizadas = questoes.filter((_, index) => index !== indexParaRemover);
-            setQuestoes(questoesAtualizadas);
-            localStorage.setItem('bancoQuestoes', JSON.stringify(questoesAtualizadas));
+            try {
+                const token = localStorage.getItem('token')
+                await deleteQuestion(token, idParaRemover); 
+                
+                // Remove a questão do estado local
+                const questoesAtualizadas = questoes.filter(q => q.id !== idParaRemover);
+                setQuestoes(questoesAtualizadas);
+
+            } catch (error) {
+                console.error("Erro ao excluir questão:", error);
+                alert("Erro ao excluir. Tente novamente.");
+            }
         }
     };
 

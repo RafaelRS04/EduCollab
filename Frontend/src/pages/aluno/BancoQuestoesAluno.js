@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import QuestaoCard from '../../components/QuestaoCard'; 
+import { getQuestions } from '../../apiService.js';
 
 const BancoQuestoesAluno = () => {
     const [questoes, setQuestoes] = useState([]);
@@ -9,11 +10,23 @@ const BancoQuestoesAluno = () => {
     const [respostas, setRespostas] = useState({});
     const [feedbacks, setFeedbacks] = useState({});
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        const questoesSalvas = localStorage.getItem('bancoQuestoes');
-        if (questoesSalvas) {
-            setQuestoes(JSON.parse(questoesSalvas));
-        }
+        const fetchQuestoes = async () => {
+            try {
+                const token = localStorage.getItem('token')
+                const data = await getQuestions(token); 
+                setQuestoes(data);
+            } catch (error) {
+                console.error("Erro ao buscar questões:", error);
+                alert("Não foi possível carregar suas questões.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchQuestoes();
     }, []);
 
     const questoesFiltradas = questoes.filter(q =>

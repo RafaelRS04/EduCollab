@@ -75,3 +75,56 @@ export const getUserProfile = async (token) => {
     return await response.json();
 
 };
+
+export const getQuestions = async (token) => {
+    const response = await fetch(`${API_URL}/questions`, {
+        method: 'GET',
+        headers: {
+            // Envia o Token de acesso no cabeçalho de Autorização
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Falha ao buscar questões');
+    }
+
+    return await response.json();
+}
+
+export const createQuestion = async (token, question) => {
+    const response = await fetch(`${API_URL}/question`, {
+        method: 'POST',
+        headers: {
+            // Envia o Token de acesso no cabeçalho de Autorização
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(question),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Falha ao criar questão');
+    }
+
+    return await response.json();
+}
+
+export const deleteQuestion = async (token, id) => {
+    const response = await fetch(`${API_URL}/question/${id}`, {
+        method: 'DELETE',
+        headers: {
+            // Envia o Token de acesso no cabeçalho de Autorização
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Falha ao criar questão');
+    }
+
+    return await response.json();
+}
