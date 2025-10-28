@@ -1,28 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../../components/Footer';
-import ActionCard from '../../components/ActionCard'; 
+import ActionCard from '../../components/ActionCard';
 
 const ProfessorHome = () => {
-    const [perfil, setPerfil] = useState({ nome: 'Professor', foto: 'https://via.placeholder.com/40' });
-
-    useEffect(() => {
-        const perfilSalvo = sessionStorage.getItem("perfilProfessor");
-        if (perfilSalvo) {
-            setPerfil(JSON.parse(perfilSalvo));
-        }
-    }, []);
-
     return (
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <div style={{ flex: '1 0 auto' }}>
                 <nav className="navbar navbar-expand-lg">
                     <div className="container d-flex justify-content-between align-items-center">
                         <div className="d-flex align-items-center">
-                            <img id="fotoPerfil" src={perfil.foto} alt="Foto do Professor"
-                                className="rounded-circle me-2" style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
                             <Link to="/professor/perfil" id="nomePerfil" className="navbar-brand mb-0">
-                                {perfil.nome}
+                                <i className="fas fa-user-graduate me-2"></i>
+                                Painel do Professor
                             </Link>
                         </div>
                         <span className="navbar-text text-white fw-bold">

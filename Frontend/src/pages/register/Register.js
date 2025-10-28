@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'; // 1. Importar useEffect
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { registerUser } from '../../apiService.js'; // Ajuste o caminho se necessário
+import { registerUser } from '../../apiService.js';
 import './Register.css';
 
 const Register = () => {
     const navigate = useNavigate();
 
-    // 2. Usar useState individual para cada campo (como no seu exemplo)
+    // Usar useState individual para cada campo (como no seu exemplo)
     const [userType, setUserType] = useState(null); // 'student' ou 'teacher'
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ const Register = () => {
     const [isFormValid, setIsFormValid] = useState(false);
     const [error, setError] = useState(null);
 
-    // 3. useEffect para validar o formulário sempre que um campo muda
+    // useEffect para validar o formulário sempre que um campo muda
     useEffect(() => {
         // Validação dos campos comuns
         const commonFieldsValid = name && email && phone && password && agreeTerms;
@@ -41,7 +41,7 @@ const Register = () => {
 
     }, [name, email, phone, password, agreeTerms, userType, studentLevel, teacherArea, teacherLevel]); // Dependências do useEffect
 
-    // 4. handleSubmit adaptado para usar os estados individuais e chamar a API
+    // handleSubmit adaptado para usar os estados individuais e chamar a API
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError(null); // Limpa erros anteriores
@@ -54,13 +54,13 @@ const Register = () => {
 
         // Monta o objeto userData com os estados individuais
         const userData = {
+            name: name,
             email: email,
+            phone: phone,
             password: password,
             user_type: userType,
-            // (Opcional) Ajustar o backend para receber name e phone se necessário
-            level: userType === 'student' ? studentLevel : null,
+            level: userType === 'student' ? studentLevel : teacherLevel,
             area: userType === 'teacher' ? teacherArea : null,
-            // teacherLevel não está sendo enviado ao backend atual
         };
 
         try {
@@ -83,7 +83,7 @@ const Register = () => {
         }
     };
 
-    // 5. JSX adaptado para usar os estados individuais no 'value' e 'onChange'
+    // JSX adaptado para usar os estados individuais no 'value' e 'onChange'
     return (
         <div className="register-container">
             <div className="register-box">

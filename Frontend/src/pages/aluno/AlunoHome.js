@@ -9,10 +9,12 @@ const AlunoHome = () => {
             <div style={{ flex: '1 0 auto' }}>
                 <nav className="navbar navbar-expand-lg">
                     <div className="container d-flex justify-content-between align-items-center">
-                        <span className="navbar-brand text-white mb-0">
-                            <i className="fas fa-user-graduate me-2"></i>
-                            Painel do Aluno
-                        </span>
+                         <div className="d-flex align-items-center">
+                            <Link to="/aluno/perfil" id="nomePerfil" className="navbar-brand mb-0">
+                                <i className="fas fa-user-graduate me-2"></i>
+                                Painel do Aluno
+                            </Link>
+                        </div>
                         <span className="navbar-text text-white fw-bold">
                             EduCollab
                         </span>

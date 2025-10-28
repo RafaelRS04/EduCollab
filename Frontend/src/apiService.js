@@ -76,6 +76,32 @@ export const getUserProfile = async (token) => {
 
 };
 
+
+/**
+ * Função para atualizar dados do usuário 
+ */
+export const updateUserProfile = async (token, profileData) => {   
+    const response = await fetch(`${API_URL}/users/me`, {
+        method: 'PATCH',
+        headers: {
+            // Envia o Token de acesso no cabeçalho de Autorização
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Falha ao atualizar perfil');
+    }
+
+    return await response.json();
+};
+
+/**
+ * Função para buscar questões
+ */
 export const getQuestions = async (token) => {
     const response = await fetch(`${API_URL}/questions`, {
         method: 'GET',
@@ -93,6 +119,9 @@ export const getQuestions = async (token) => {
     return await response.json();
 }
 
+/**
+ * Função para criar questão
+ */
 export const createQuestion = async (token, question) => {
     const response = await fetch(`${API_URL}/question`, {
         method: 'POST',
@@ -112,6 +141,9 @@ export const createQuestion = async (token, question) => {
     return await response.json();
 }
 
+/**
+ * Função para deletar questão
+ */
 export const deleteQuestion = async (token, id) => {
     const response = await fetch(`${API_URL}/question/${id}`, {
         method: 'DELETE',
