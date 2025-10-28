@@ -5,12 +5,12 @@ const API_URL = 'http://127.0.0.1:8000';
  * Função para fazer Login.
  */
 export const loginUser = async (email, password) => {
-    // 1. Formata os dados para o padrão de formulário
+    // Formata os dados para o padrão de formulário
     const params = new URLSearchParams();
     params.append('username', email);     // O FastAPI espera 'username', não 'email'
     params.append('password', password);
 
-    // 2. Faz a requisição POST para /token
+    // Faz a requisição POST para /token
     const response = await fetch(`${API_URL}/token`, {
         method: 'POST',
         headers: {
@@ -19,13 +19,13 @@ export const loginUser = async (email, password) => {
         body: params,
     });
 
-    // 3. Se a resposta não for OK (ex: erro 401), lança um erro
+    // Se a resposta não for OK (ex: erro 401), lança um erro
     if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Falha no login');
     }
 
-    // 4. Retorna os dados (token)
+    // Retorna os dados (token)
     return await response.json();
 };
 
@@ -61,7 +61,7 @@ export const getUserProfile = async (token) => {
     const response = await fetch(`${API_URL}/users/me`, {
         method: 'GET',
         headers: {
-            // 1. Envia o Token de acesso no cabeçalho de Autorização
+            // Envia o Token de acesso no cabeçalho de Autorização
             'Authorization': `Bearer ${token}`,
         },
     });
