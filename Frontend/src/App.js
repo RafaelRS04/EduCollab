@@ -47,10 +47,7 @@ function App() {
           <Route path="/professor/banco-questoes" element={<BancoQuestoesProfessor />} />
           <Route path="/professor/provas" element={<SistemaProvas />} />
           <Route path="/professor/forumProfessor" element={<ForumDuvidasProfessor />} />
-
-          {/* Rotas do Fórum  */}
-          <Route path="/forumProfessor" element={<ForumDuvidasProfessor />} />
-          <Route path="/forum/topico/:id" element={<TopicoDetalheProfessor />} />
+          <Route path="/professor/forumProfessor/topico/:id" element={<TopicoDetalheProfessor />} />
         </Route>
         
         {/* Rotas protegidas do Aluno*/}
@@ -60,10 +57,7 @@ function App() {
           <Route path="/aluno/perfil" element={<AlunoPerfil />} />
           <Route path="/aluno/banco-questoes" element={<BancoQuestoesAluno />} />
           <Route path="/aluno/forumAluno" element={<ForumDuvidasAluno />} />
-
-          {/* Rotas do Fórum  */}
-          <Route path="/forumAluno" element={<ForumDuvidasAluno />} />
-          <Route path="/forum/topico/:id" element={<TopicoDetalheAluno />} />
+          <Route path="/aluno/forumAluno/topico/:id" element={<TopicoDetalheAluno />} />
         </Route>
       </Routes>
     </Router>

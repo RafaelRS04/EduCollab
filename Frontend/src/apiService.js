@@ -160,3 +160,77 @@ export const deleteQuestion = async (token, id) => {
 
     return await response.json();
 }
+
+/**
+ * Função para buscar todos os tópicos do fórum
+ */
+export const getForumTopics = async (token) => {
+    const response = await fetch(`${API_URL}/forum/topics`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Falha ao buscar tópicos');
+    }
+    return await response.json();
+};
+
+/**
+ * Função para criar um novo tópico
+ */
+export const createForumTopic = async (token, topicData) => {
+    // topicData deve ser um objeto: { titulo: "...", conteudo: "..." }
+    const response = await fetch(`${API_URL}/forum/topics`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(topicData),
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Falha ao criar tópico');
+    }
+    return await response.json();
+};
+
+/**
+ * Função para buscar os detalhes de um tópico
+ */
+export const getTopicDetails = async (token, topicId) => {
+    const response = await fetch(`${API_URL}/forum/topics/${topicId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Falha ao buscar detalhes do tópico');
+    }
+    return await response.json();
+};
+
+/**
+ * Função para adicionar uma resposta a um tópico
+ */
+export const addForumReply = async (token, topicId, replyData) => {
+    // replyData deve ser um objeto: { texto: "..." }
+    const response = await fetch(`${API_URL}/forum/topics/${topicId}/replies`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(replyData),
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Falha ao adicionar resposta');
+    }
+    return await response.json();
+};
