@@ -6,21 +6,21 @@ import { loginUser } from '../../apiService.js';
 const LoginSelection = () => {
     const navigate = useNavigate();
 
-    //Criar "estados" para os campos de formulário e erros
+    // Criar "estados" para os campos de formulário e erros
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null); // Para mostrar erros da API
 
-    //login do professor
+    // Login do professor
     const handleLoginProfessor = async (e) => {
         e.preventDefault();
         setError(null); // Limpa erros antigos
 
         try {
-            //Chamar a API de login
+            // Chamar a API de login
             const data = await loginUser(email, password);
 
-            //Verificar se o usuário logado é um professor
+            // Verificar se o usuário logado é um professor
             if (data.user_type === 'teacher') {
                 localStorage.setItem('token', data.access_token);
                 localStorage.setItem('user_type', data.user_type);
@@ -30,21 +30,21 @@ const LoginSelection = () => {
                 setError('Este é um login de Aluno. Por favor, use o outro botão.');
             }
         } catch (err) {
-            //Se a API der erro (401), mostrar a mensagem
+            // Se a API der erro (401), mostrar a mensagem
             setError(err.message); // Ex: "Email ou senha incorretos"
         }
     };
 
-    //login do aluno
+    // Login do aluno
     const handleLoginAluno = async (e) => {
         e.preventDefault();
         setError(null);
 
         try {
-            //Chamar a API de login
+            // Chamar a API de login
             const data = await loginUser(email, password);
 
-            //Verificar se o usuário logado é um aluno
+            // Verificar se o usuário logado é um aluno
             if (data.user_type === 'student') {
                 localStorage.setItem('token', data.access_token);
                 localStorage.setItem('user_type', data.user_type);
@@ -73,7 +73,7 @@ const LoginSelection = () => {
                 <form className="login-form">
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
-                        {/* 10. Conectar os inputs ao estado */}
+                        {/* Conectar os inputs ao estado */}
                         <input 
                             type="email" 
                             id="email" 
