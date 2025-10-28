@@ -22,6 +22,9 @@ import TopicoDetalheAluno from './pages/forumAluno/TopicoDetalheAluno';
 import ForumDuvidasProfessor from './pages/forumProfessor/ForumDuvidasProfessor';
 import TopicoDetalheProfessor from './pages/forumProfessor/TopicoDetalheProfessor';
 
+// Proteção de rotas
+import { AlunoRoute, ProfessorRoute } from './pages/login/ProtectedRoutes.jsx'
+
 function App() {
   return (
     <Router>
@@ -35,23 +38,31 @@ function App() {
         {/* Rota para a tela de seleção de Register */}
         <Route path="/register" element={<Register />} />
 
-        {/* Rotas do Professor */}
-        <Route path="/professor/home" element={<ProfessorHome />} />
-        <Route path="/professor/perfil" element={<ProfessorPerfil />} />
-        <Route path="/professor/banco-questoes" element={<BancoQuestoesProfessor />} />
-        <Route path="/professor/provas" element={<SistemaProvas />} />
-        <Route path="/professor/forumProfessor" element={<ForumDuvidasProfessor />} />
+        {/* Rotas protegidas do Professor*/}
+        <Route element={<ProfessorRoute />}>
+          {/* Rotas do Professor */}
+          <Route path="/professor/home" element={<ProfessorHome />} />
+          <Route path="/professor/perfil" element={<ProfessorPerfil />} />
+          <Route path="/professor/banco-questoes" element={<BancoQuestoesProfessor />} />
+          <Route path="/professor/provas" element={<SistemaProvas />} />
+          <Route path="/professor/forumProfessor" element={<ForumDuvidasProfessor />} />
 
-         {/* Rotas do Aluno */}
-        <Route path="/aluno/home" element={<AlunoHome />} /> 
-        <Route path="/aluno/banco-questoes" element={<BancoQuestoesAluno />} />
-        <Route path="/aluno/forumAluno" element={<ForumDuvidasAluno />} />
+          {/* Rotas do Fórum  */}
+          <Route path="/forumProfessor" element={<ForumDuvidasProfessor />} />
+          <Route path="/forum/topico/:id" element={<TopicoDetalheProfessor />} />
+        </Route>
+        
+        {/* Rotas protegidas do Aluno*/}
+        <Route element={<AlunoRoute />}>
+          {/* Rotas do Aluno */}
+          <Route path="/aluno/home" element={<AlunoHome />} /> 
+          <Route path="/aluno/banco-questoes" element={<BancoQuestoesAluno />} />
+          <Route path="/aluno/forumAluno" element={<ForumDuvidasAluno />} />
 
-         {/* Rotas do Fórum  */}
-        <Route path="/forumAluno" element={<ForumDuvidasAluno />} />
-        <Route path="/forum/topico/:id" element={<TopicoDetalheAluno />} />
-        <Route path="/forumProfessor" element={<ForumDuvidasProfessor />} />
-        <Route path="/forum/topico/:id" element={<TopicoDetalheProfessor />} />
+          {/* Rotas do Fórum  */}
+          <Route path="/forumAluno" element={<ForumDuvidasAluno />} />
+          <Route path="/forum/topico/:id" element={<TopicoDetalheAluno />} />
+        </Route>
       </Routes>
     </Router>
   );
