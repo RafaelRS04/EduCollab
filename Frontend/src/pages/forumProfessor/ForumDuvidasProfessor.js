@@ -1,22 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../../components/Footer';
+import { getForumTopics, createForumTopic } from '../../apiService.js';
 
 const ForumDuvidas = () => {
     const [posts, setPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [newPost, setNewPost] = useState({
-        postAutor: '',
         postTitulo: '',
         postConteudo: ''
     });
+    
+    const token = localStorage.getItem('token')
 
-    // Carrega os posts do localStorage quando a página abre
+    // Carrega os posts da API quando a página abre
+    const fetchPosts = () => {
+        if (!token) return; // Não faz nada se não tiver token
+        
+        setIsLoading(true);
+        getForumTopics(token)
+            .then(data => {
+                // O backend retorna 'autor_nome', 'data', etc.
+                // O map garante que os nomes das props batem com o esperado
+                const postsFormatados = data.map(post => ({
+                    ...post,
+                    autor: post.autor_nome, // Ajusta o nome da prop
+                    data: new Date(post.data).toLocaleDateString('pt-BR') // Formata a data
+                }));
+                setPosts(postsFormatados);
+                setError(null);
+            })
+            .catch(err => {
+                console.error("Erro ao buscar tópicos:", err);
+                setError(err.message);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    };
+
     useEffect(() => {
-        const postsSalvos = localStorage.getItem('forumPosts');
-        if (postsSalvos) {
-            setPosts(JSON.parse(postsSalvos));
-        }
-    }, []);
+        fetchPosts();
+    }, [token]); // Recarrega se o token mudar
 
     // Atualiza o estado do formulário de novo post
     const handleChange = (e) => {
@@ -24,24 +50,31 @@ const ForumDuvidas = () => {
         setNewPost(prevState => ({ ...prevState, [id]: value }));
     };
 
-    // Adiciona um novo post à lista
+    // Adiciona um novo post via API
     const handleAddPost = (e) => {
         e.preventDefault();
-        const novoPost = {
-            id: 'topico-' + Date.now(),
-            autor: newPost.postAutor,
+        if (!token) {
+            setError("Você precisa estar logado para postar.");
+            return;
+        }
+
+        const topicData = {
             titulo: newPost.postTitulo,
-            conteudo: newPost.postConteudo,
-            data: new Date().toLocaleDateString('pt-BR'),
-            respostas: []
+            conteudo: newPost.postConteudo
         };
-        
-        const postsAtualizados = [novoPost, ...posts];
-        setPosts(postsAtualizados);
-        localStorage.setItem('forumPosts', JSON.stringify(postsAtualizados));
-        
-        // Limpa o formulário
-        setNewPost({ postAutor: '', postTitulo: '', postConteudo: '' });
+
+        createForumTopic(token, topicData)
+            .then(novoTopicoDoServidor => {
+                // Adiciona o novo post à lista (ou recarrega a lista)
+                fetchPosts(); // Simplesmente recarrega a lista
+                
+                // Limpa o formulário
+                setNewPost({ postTitulo: '', postConteudo: '' });
+            })
+            .catch(err => {
+                console.error("Erro ao criar tópico:", err);
+                setError(err.message);
+            });
     };
 
     return (
@@ -58,10 +91,6 @@ const ForumDuvidas = () => {
                     <div className="card p-4 shadow-sm mb-5">
                         <h4 className="mb-3"><i className="bi bi-pencil-square me-2"></i> Crie um novo tópico</h4>
                         <form id="postForm" onSubmit={handleAddPost}>
-                            <div className="mb-3">
-                                <label htmlFor="postAutor" className="form-label">Seu Nome</label>
-                                <input type="text" id="postAutor" className="form-control" placeholder="Ex: Luciano Rocha" required value={newPost.postAutor} onChange={handleChange} />
-                            </div>
                             <div className="mb-3">
                                 <label htmlFor="postTitulo" className="form-label">Título da Dúvida</label>
                                 <input type="text" id="postTitulo" className="form-control" placeholder="Seja claro e objetivo" required value={newPost.postTitulo} onChange={handleChange} />
@@ -80,7 +109,7 @@ const ForumDuvidas = () => {
                     <div className="list-group shadow-sm">
                         {posts.length > 0 ? (
                             posts.map(post => (
-                                <Link key={post.id} to={`/forum/topico/${post.id}`} className="list-group-item list-group-item-action flex-column align-items-start">
+                                <Link key={post.id} to={`/professor/forumProfessor/topico/${post.id}`} className="list-group-item list-group-item-action flex-column align-items-start">
                                     <div className="d-flex w-100 justify-content-between">
                                         <h5 className="mb-1">{post.titulo}</h5>
                                         <small>{post.data}</small>
