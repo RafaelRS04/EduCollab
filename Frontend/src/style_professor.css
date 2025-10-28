@@ -31,13 +31,13 @@ body {
 }
 
 /* ======== BOTÕES ======== */
-.btn-primary { 
+.btn-prim { 
   background-color: #152295; /* Roxo principal */
   border: none; 
   color: white;
 }
 
-.btn-primary:hover { 
+.btn-prim:hover { 
   background-color: #6e83af; /* Roxo de destaque */
 }
 

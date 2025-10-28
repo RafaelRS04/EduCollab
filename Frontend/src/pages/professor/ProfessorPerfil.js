@@ -87,7 +87,7 @@ const ProfessorPerfil = () => {
                                 <label htmlFor="materias" className="form-label">Matérias que Leciona</label>
                                 <input type="text" id="materias" className="form-control" placeholder="Ex: Matemática, Física" value={perfil.materias} onChange={handleChange} />
                             </div>
-                            <button type="submit" className="btn btn-primary">Salvar Alterações</button>
+                            <button type="submit" className="btn btn-prim">Salvar Alterações</button>
                         </form>
                     </div>
                 </div>
