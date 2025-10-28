@@ -115,7 +115,7 @@ const SistemaProvas = () => {
                                         <option value="C">C</option>
                                         <option value="D">D</option>
                                     </select>
-                                    <button type="submit" className="btn btn-primary">Adicionar</button>
+                                    <button type="submit" className="btn btn-prim">Adicionar</button>
                                 </form>
                             </div>
                             <h5 className="mt-3">Questões cadastradas para esta prova:</h5>
@@ -152,7 +152,7 @@ const SistemaProvas = () => {
                                         {prova.questoes.map((q, idx) => (
                                             <p key={idx}><b>{idx + 1})</b> {q.enunciado}</p>
                                         ))}
-                                        <button className="btn btn-primary mt-2" onClick={() => baixarPdf(prova)}>Baixar PDF</button>
+                                        <button className="btn btn-prim mt-2" onClick={() => baixarPdf(prova)}>Baixar PDF</button>
                                     </div>
                                 ))}
                             </div>

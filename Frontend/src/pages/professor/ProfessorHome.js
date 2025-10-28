@@ -45,7 +45,7 @@ const ProfessorHome = () => {
                             text="Crie questões, gere provas personalizadas e corrija automaticamente."
                             linkTo="/professor/provas"
                             buttonText="Acessar"
-                            buttonClass="btn-primary"
+                            buttonClass="btn-prim"
                         />
                         <ActionCard
                             icon="bi bi-chat-dots-fill text-success"

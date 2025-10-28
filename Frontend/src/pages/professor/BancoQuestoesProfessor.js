@@ -89,7 +89,7 @@ const BancoQuestoesProfessor = () => {
                                     <option value="D">D</option>
                                 </select>
                             </div>
-                            <button type="submit" className="btn btn-primary w-100">
+                            <button type="submit" className="btn btn-prim w-100">
                                 <i className="bi bi-check-circle-fill me-2"></i> Salvar Questão
                             </button>
                         </form>

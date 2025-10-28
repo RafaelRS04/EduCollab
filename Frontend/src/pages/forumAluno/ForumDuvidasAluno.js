@@ -70,7 +70,7 @@ const ForumDuvidas = () => {
                                 <label htmlFor="postConteudo" className="form-label">Descreva sua dúvida</label>
                                 <textarea id="postConteudo" className="form-control" rows="4" required value={newPost.postConteudo} onChange={handleChange}></textarea>
                             </div>
-                            <button type="submit" className="btn btn-primary w-100">
+                            <button type="submit" className="btn btn-prim w-100">
                                 <i className="bi bi-send-fill me-2"></i> Publicar Tópico
                             </button>
                         </form>
