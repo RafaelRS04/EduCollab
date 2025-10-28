@@ -11,22 +11,24 @@ const ForumDuvidas = () => {
         postTitulo: '',
         postConteudo: ''
     });
-    
-    const token = localStorage.getItem('token')
 
-    // Carrega os posts da API quando a página abre
+    // Estados para a API de verificação ortográfica
+    const [correcoes, setCorrecoes] = useState([]);
+    const [mensagemApi, setMensagemApi] = useState('');
+    
+    const token = localStorage.getItem('token');
+
+    // Carrega os posts da API (Função original - Intocada)
     const fetchPosts = () => {
-        if (!token) return; // Não faz nada se não tiver token
+        if (!token) return; 
         
         setIsLoading(true);
         getForumTopics(token)
             .then(data => {
-                // O backend retorna 'autor_nome', 'data', etc.
-                // O map garante que os nomes das props batem com o esperado
                 const postsFormatados = data.map(post => ({
                     ...post,
-                    autor: post.autor_nome, // Ajusta o nome da prop
-                    data: new Date(post.data).toLocaleDateString('pt-BR') // Formata a data
+                    autor: post.autor_nome, 
+                    data: new Date(post.data).toLocaleDateString('pt-BR') 
                 }));
                 setPosts(postsFormatados);
                 setError(null);
@@ -42,15 +44,21 @@ const ForumDuvidas = () => {
 
     useEffect(() => {
         fetchPosts();
-    }, [token]); // Recarrega se o token mudar
+    }, [token]); 
 
-    // Atualiza o estado do formulário de novo post
+    // Atualiza o estado e limpa a verificação antiga
     const handleChange = (e) => {
         const { id, value } = e.target;
         setNewPost(prevState => ({ ...prevState, [id]: value }));
+
+        // Limpa as sugestões se o usuário voltar a digitar
+        if (id === 'postConteudo') {
+            setCorrecoes([]);
+            setMensagemApi('');
+        }
     };
 
-    // Adiciona um novo post via API
+    // Adiciona post via API e limpa a verificação
     const handleAddPost = (e) => {
         e.preventDefault();
         if (!token) {
@@ -65,16 +73,63 @@ const ForumDuvidas = () => {
 
         createForumTopic(token, topicData)
             .then(novoTopicoDoServidor => {
-                // Adiciona o novo post à lista (ou recarrega a lista)
-                fetchPosts(); // Simplesmente recarrega a lista
+                fetchPosts(); 
                 
                 // Limpa o formulário
                 setNewPost({ postTitulo: '', postConteudo: '' });
+                
+                // Limpa também os resultados da API
+                setCorrecoes([]);
+                setMensagemApi('');
             })
             .catch(err => {
                 console.error("Erro ao criar tópico:", err);
                 setError(err.message);
             });
+    };
+
+    // Função para chamar a API de verificação ortográfica (LanguageTool)
+    const handleVerificarOrtografia = async () => {
+        setCorrecoes([]); // Limpa correções antigas
+        setMensagemApi('Verificando...');
+
+        const textToCheck = newPost.postConteudo; // Pega o texto do estado
+
+        if (!textToCheck.trim()) {
+            setMensagemApi('Digite algo para verificar.');
+            return;
+        }
+
+        // Prepara os dados para a API externa
+        const params = new URLSearchParams();
+        params.append('language', 'pt-BR');
+        params.append('text', textToCheck);
+
+        try {
+            // Chama a API externa gratuita
+            const response = await fetch('https://api.languagetool.org/v2/check', {
+                method: 'POST',
+                body: params
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro na resposta da API');
+            }
+
+            const data = await response.json();
+
+            // Processa a resposta
+            if (data.matches.length === 0) {
+                setMensagemApi('Nenhum erro de ortografia encontrado!');
+            } else {
+                setMensagemApi('Foram encontradas sugestões:');
+                setCorrecoes(data.matches); // Salva os erros no estado
+            }
+
+        } catch (error) {
+            console.error('Erro ao verificar ortografia:', error);
+            setMensagemApi('Erro ao conectar com o serviço de correção.');
+        }
     };
 
     return (
@@ -99,6 +154,45 @@ const ForumDuvidas = () => {
                                 <label htmlFor="postConteudo" className="form-label">Descreva sua dúvida</label>
                                 <textarea id="postConteudo" className="form-control" rows="4" required value={newPost.postConteudo} onChange={handleChange}></textarea>
                             </div>
+
+                            {/* Botão e área de resultados da API externa */}
+                            <div className="mb-3">
+                                <button 
+                                    type="button" 
+                                    className="btn btn-secondary w-100" 
+                                    onClick={handleVerificarOrtografia}
+                                >
+                                    Verificar Ortografia
+                                </button>
+                                
+                                {/* Área para exibir os resultados da API */}
+                                {mensagemApi && (
+                                    <div className="mt-3 p-3 border rounded" style={{backgroundColor: '#f8f9fa'}}>
+                                        <p className="fw-bold">{mensagemApi}</p>
+                                        {correcoes.length > 0 && (
+                                            <ul className="list-group list-group-flush">
+                                                {correcoes.map((match, index) => (
+                                                    <li className="list-group-item bg-transparent" key={index}>
+                                                        {/* Mostra o texto errado em vermelho */}
+                                                        <span className="text-danger">"{match.context.text.substring(match.context.offset, match.context.offset + match.context.length)}"</span>
+                                                        <br />
+                                                        <small>{match.message}</small>
+                                                        
+                                                        {/* Mostra as sugestões de correção */}
+                                                        {match.replacements.length > 0 && (
+                                                            <div className="mt-1">
+                                                                <small>Sugestões: <span className="text-success fw-bold">{match.replacements.map(r => r.value).join(', ')}</span></small>
+                                                            </div>
+                                                        )}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                            {/* Fim da área da API */}
+
                             <button type="submit" className="btn btn-prim w-100">
                                 <i className="bi bi-send-fill me-2"></i> Publicar Tópico
                             </button>
@@ -107,7 +201,12 @@ const ForumDuvidas = () => {
 
                     <h4 className="mb-3"><i className="bi bi-chat-left-text-fill me-2"></i> Tópicos Recentes</h4>
                     <div className="list-group shadow-sm">
-                        {posts.length > 0 ? (
+                        {/* Tratamento de isLoading e error */}
+                        {isLoading ? (
+                            <p className="text-center">Carregando tópicos...</p>
+                        ) : error ? (
+                            <p className="text-center text-danger">Erro ao carregar tópicos: {error}</p>
+                        ) : posts.length > 0 ? (
                             posts.map(post => (
                                 <Link key={post.id} to={`/aluno/forumAluno/topico/${post.id}`} className="list-group-item list-group-item-action flex-column align-items-start">
                                     <div className="d-flex w-100 justify-content-between">
@@ -115,7 +214,8 @@ const ForumDuvidas = () => {
                                         <small>{post.data}</small>
                                     </div>
                                     <p className="mb-1">Postado por: <strong>{post.autor}</strong></p>
-                                    <small>{post.respostas.length} respostas.</small>
+                                    
+                                    <small>{post.respostas_count ?? 0} respostas.</small>
                                 </Link>
                             ))
                         ) : (
