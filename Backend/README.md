@@ -2,9 +2,9 @@
 
 Este diretório contém o código-fonte do backend da aplicação EduCollab, desenvolvido com o framework FastAPI em Python. A API é responsável pela lógica de negócios, autenticação, autorização e gerenciamento de dados da plataforma.
 
-## 🚀 Funcionalidades Principais (main.py)
+## 🚀 Funcionalidades Principais
 
-O arquivo `main.py` implementa os seguintes recursos essenciais:
+Os arquivos `users.py` e `security.py` implementam os seguintes recursos essenciais:
 
 1.  **Autenticação de Usuários:**
     * **Cadastro (`POST /register`):** Permite que novos usuários (alunos ou professores) criem uma conta.
@@ -64,7 +64,9 @@ O arquivo `main.py` implementa os seguintes recursos essenciais:
     * `python-multipart`: Utilizado pelo FastAPI para processar uploads de arquivos.
     * `google-generativeai`: Integração com o Google Gemini.
 
-4.  **Iniciar o Servidor:**
+4.  **Adicionar Gemini API Key:** Num arquivo nomeado `.env`, adicione a chave da API do Gemini (como em `.env.example`).
+
+5.  **Iniciar o Servidor:**
     ```bash
     uvicorn main:app --reload
     ```
@@ -72,15 +74,11 @@ O arquivo `main.py` implementa os seguintes recursos essenciais:
     * `app`: Refere-se à instância `FastAPI()` criada no arquivo.
     * `--reload`: Reinicia o servidor automaticamente após salvar alterações no código.
 
-5.  **Acessar a API:**
+6.  **Acessar a API:**
     * A API estará disponível em: `http://127.0.0.1:8000`
     * A documentação interativa (Swagger UI) estará em: `http://127.0.0.1:8000/docs`
 
 ## ⚠️ Atenção
 
-* **Banco de Dados:** Atualmente, os dados dos usuários são armazenados em um dicionário Python em memória (`fake_users_db`). Isso é **apenas para desenvolvimento e teste**. Para produção, ele **deve** ser substituído por um banco de dados real (ex: PostgreSQL, MongoDB).
+* **Banco de Dados:** Atualmente, os dados dos usuários são armazenados em um dicionário Python em memória. Isso é **apenas para desenvolvimento e teste**. Para produção, ele **deve** ser substituído por um banco de dados real (ex: PostgreSQL, MongoDB).
 * **SECRET_KEY:** A chave secreta (`SECRET_KEY`) usada para assinar os tokens JWT no código é um exemplo. Em produção, ela **deve** ser substituída por uma chave forte e gerenciada de forma segura (ex: variáveis de ambiente).
-
-## 📄 Contexto do Projeto
-
-[cite_start]Este backend atende aos requisitos do Trabalho 2 da disciplina de Desenvolvimento de Aplicações Web [cite: 1, 2][cite_start], focando na criação de uma API com FastAPI [cite: 734][cite_start], integração com frontend [cite: 13][cite_start], implementação de autenticação [cite: 15, 586] [cite_start]e autorização [cite: 16, 587] [cite_start]utilizando padrões como OAuth2 [cite: 207, 272] [cite_start]e JWT[cite: 242].
