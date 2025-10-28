@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import QuestaoCard from '../../components/QuestaoCard';
-import { getQuestions, createQuestion, deleteQuestion } from '../../apiService.js';
+import { getQuestions, createQuestion, deleteQuestion, getAICompletion } from '../../apiService.js';
 
 const BancoQuestoesProfessor = () => {
     const [questoes, setQuestoes] = useState([]);
@@ -82,6 +82,55 @@ const BancoQuestoesProfessor = () => {
         }
     };
 
+    const [aiPrompt, setAiPrompt] = useState("");
+    const [aiLoading, setAiLoading] = useState(false);
+    const [aiResult, setAiResult] = useState(null);
+    const [aiError, setAiError] = useState(null);
+    
+    const token = localStorage.getItem('token')
+
+    const handleAIGenerate = (e) => {
+        e.preventDefault();
+        setAiLoading(true);
+        setAiResult(null);
+        setAiError(null);
+
+        const context = "3 questões de múltipla escolha (A, B, C, D) com gabarito";
+        
+        getAICompletion(token, aiPrompt, context)
+            .then(data => {
+                console.log("IA Gerou:", data.sugestoes);
+                setAiResult(data.sugestoes); // data.sugestoes (do JSON da IA)
+            })
+            .catch(err => {
+                setAiError(err.message);
+            })
+            .finally(() => {
+                setAiLoading(false);
+            });
+    };
+
+    const handleUseSuggestion = (sugestao) => {
+        const questaoFormatada = {
+            materia: aiPrompt, 
+            
+            enunciado: sugestao.pergunta,
+            
+            // Garante 4 alternativas, mesmo que a IA mande menos
+            alternativas: [
+                sugestao.opcoes[0] || '',
+                sugestao.opcoes[1] || '',
+                sugestao.opcoes[2] || '',
+                sugestao.opcoes[3] || ''
+            ],
+            
+            resposta: sugestao.correta 
+        };
+
+        setNovaQuestao(questaoFormatada);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <div style={{ flex: '1 0 auto', paddingBottom: '80px' }}>
@@ -128,6 +177,61 @@ const BancoQuestoesProfessor = () => {
                                 <i className="bi bi-check-circle-fill me-2"></i> Salvar Questão
                             </button>
                         </form>
+                    </div>
+                    
+                    <div className="card p-4 shadow-sm mb-5">
+                        <h4 className="mb-3">
+                            <i className="bi bi-robot me-2"></i> 
+                            Assistente de Questões (IA)
+                        </h4>
+                        <form onSubmit={handleAIGenerate}>
+                            <div className="mb-3">
+                                <label htmlFor="aiPrompt" className="form-label">Descreva o tópico</label>
+                                <input 
+                                    type="text" 
+                                    id="aiPrompt" 
+                                    className="form-control" 
+                                    placeholder="Ex: Revolução Francesa" 
+                                    required 
+                                    value={aiPrompt}
+                                    onChange={(e) => setAiPrompt(e.target.value)} 
+                                />
+                            </div>
+                            <button type="submit" className="btn btn-primary w-100" disabled={aiLoading}>
+                                {aiLoading ? "Gerando..." : "Gerar Sugestões de Questões"}
+                            </button>
+                        </form>
+
+                        {aiLoading && <div className="text-center mt-3">Carregando...</div>}
+                        {aiError && <div className="alert alert-danger mt-3">{aiError}</div>}
+                        
+                        {aiResult && (
+                            <div className="mt-4">
+                                <h5>Sugestões Geradas:</h5>
+                                {aiResult.map((sugestao, index) => (
+                                    <div className="card bg-light mb-2" key={index}>
+                                        <div className="card-body">
+                                            <p><strong>Pergunta:</strong> {sugestao.pergunta}</p>
+                                            {sugestao.opcoes && (
+                                                <ul>
+                                                    {sugestao.opcoes.map((opt, i) => (
+                                                        <li key={i} style={{ color: sugestao.correta === opt ? 'green' : 'inherit' }}>
+                                                            {opt}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                            <button 
+                                            className="btn btn-sm btn-outline-secondary"
+                                            onClick={() => handleUseSuggestion(sugestao)} 
+                                            >
+                                                Usar esta questão
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <h4 className="mb-3">

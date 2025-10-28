@@ -234,3 +234,29 @@ export const addForumReply = async (token, topicId, replyData) => {
     }
     return await response.json();
 };
+
+/**
+ * Função para chamar o assistente de IA
+ */
+export const getAICompletion = async (token, promptText, contextText) => {
+    const response = await fetch(`${API_URL}/ai/generate-content`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            prompt: promptText,
+            context: contextText
+        }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Falha ao gerar conteúdo');
+    }
+    
+    const data = await response.json();
+    // A resposta da IA (que é um JSON string) está dentro de data.response
+    return JSON.parse(data.response); 
+};
