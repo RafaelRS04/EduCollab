@@ -19,9 +19,9 @@ A plataforma é dividida em duas áreas principais, cada uma com suas próprias 
 * **Edição de Perfil:** Professores podem atualizar suas informações pessoais, como nome, contato e foto de perfil.
 * **Banco de Questões:** Uma interface para criar, visualizar e excluir questões de múltipla escolha que ficam disponíveis para os alunos estudarem.
 * **Sistema de Provas:** Uma ferramenta robusta para:
-    * Criar questões específicas para uma prova.
-    * Gerar múltiplas versões de provas aleatórias com base nas questões criadas.
-    * Baixar as provas geradas em formato **PDF**.
+    * Criar questões específicas para uma prova.
+    * Gerar múltiplas versões de provas aleatórias com base nas questões criadas.
+    * Baixar as provas geradas em formato **PDF**.
 * **Fórum de Dúvidas:** Um espaço para que professores e alunos possam criar tópicos, postar dúvidas e responder uns aos outros.
 
 ### Para Alunos:
@@ -32,40 +32,42 @@ A plataforma é dividida em duas áreas principais, cada uma com suas próprias 
 ## 🛠️ Tecnologias Utilizadas
 
 * **Frontend:**
-    * [**React.js**](https://reactjs.org/): Biblioteca principal para a construção da interface de usuário.
-    * [**React Router**](https://reactrouter.com/): Para gerenciamento das rotas e navegação entre as páginas (SPA).
-    * [**Bootstrap**](https://getbootstrap.com/): Framework CSS para estilização e responsividade.
-    * [**Font Awesome**](https://fontawesome.com/): Biblioteca de ícones.
+    * [**React.js**](https://reactjs.org/): Biblioteca principal para a construção da interface de usuário.
+    * [**React Router**](https://reactrouter.com/): Para gerenciamento das rotas e navegação entre as páginas (SPA).
+    * [**Bootstrap**](https://getbootstrap.com/): Framework CSS para estilização e responsividade.
+    * [**Font Awesome**](https://fontawesome.com/): Biblioteca de ícones.
 * **Geração de Documentos:**
-    * [**jsPDF**](https://github.com/parallax/jsPDF): Para a geração dinâmica de provas em formato PDF.
-* **Armazenamento de Dados:**
-    * **Browser Local Storage / Session Storage:** Utilizado para persistir os dados do perfil, questões e tópicos do fórum de forma local no navegador do usuário.
+    * [**jsPDF**](https://github.com/parallax/jsPDF): Para a geração dinâmica de provas em formato PDF.
+* **APIs e Serviços Externos:**
+    * [**VLibras**](https://www.vlibras.gov.br/): Widget de acessibilidade para tradução de conteúdo para Língua Brasileira de Sinais (Libras).
+    * [**LanguageTool**](https://languagetool.org/): API externa para verificação ortográfica e gramatical no Fórum de Dúvidas.
+
 
 ## 🚀 Como Executar o Projeto Localmente
 
 Para rodar este projeto em sua máquina, siga os passos abaixo:
 
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/RafaelRS04/EduCollab.git](https://github.com/RafaelRS04/EduCollab.git)
-    ```
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/RafaelRS04/EduCollab.git](httpsD://github.com/RafaelRS04/EduCollab.git)
+    ```
 
-2.  **Navegue até o diretório do projeto:**
-    ```bash
-    cd EduCollab/Frontend
-    ```
+2.  **Navegue até o diretório do projeto:**
+    ```bash
+    cd EduCollab/Frontend
+    ```
 
-3.  **Instale as dependências:**
-    Este comando irá ler o `package.json` e instalar todas as bibliotecas necessárias (React, React Router, jsPDF, etc.).
-    ```bash
-    npm install
-    ```
+3.  **Instale as dependências:**
+    Este comando irá ler o `package.json` e instalar todas as bibliotecas necessárias (React, React Router, jsPDF, etc.).
+    ```bash
+    npm install
+    ```
 
-4.  **Inicie o servidor de desenvolvimento:**
-    Este comando iniciará a aplicação em modo de desenvolvimento.
-    ```bash
-    npm start
-    ```
+4.  **Inicie o servidor de desenvolvimento:**
+    Este comando iniciará a aplicação em modo de desenvolvimento.
+    ```bash
+    npm start
+    ```
 
 
 ## 📂 Estrutura de Arquivos
