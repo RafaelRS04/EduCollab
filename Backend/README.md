@@ -36,18 +36,18 @@ O arquivo `main.py` implementa os seguintes recursos essenciais:
 1.  **Criar Ambiente Virtual:**
     Certifique-se de ter o Python 3.9+ instalado. No terminal, dentro desta pasta, execute:
     ```bash
-    python -m venv .env
+    python -m venv venv
     ```
     
 2.  **Ativar Ambiente Virtual:**
     Esta etapa pode variar de plataforma para plataforma, sendo comum em ambientes POSIX:
     ```bash
-    source .env/bin/activate
+    source venv/bin/activate
     ```
     E em sistemas Windows:
 
     ```bash
-    .env\Scripts\activate.bat
+    venv\Scripts\activate.bat
     ```
 
     Se necessário, veja mais informações em [venv — Creation of virtual environments](https://docs.python.org/3/library/venv.html).
@@ -62,6 +62,7 @@ O arquivo `main.py` implementa os seguintes recursos essenciais:
     * `bcrypt`: Biblioteca para hashing (armazenamento seguro) de senhas.
     * `PyJWT[cryptography]`: Para criação e verificação de tokens JWT (autenticação).
     * `python-multipart`: Utilizado pelo FastAPI para processar uploads de arquivos.
+    * `google-generativeai`: Integração com o Google Gemini.
 
 4.  **Iniciar o Servidor:**
     ```bash

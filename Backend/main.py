@@ -1,11 +1,20 @@
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 from fastapi import FastAPI
+
+
+# -----------------------------------------------------
+# CHAVES DE API
+# -----------------------------------------------------
+
+load_dotenv()
 
 # -----------------------------------------------------
 # APLICAÇÃO E ROTAS
 # -----------------------------------------------------
 
 import forum
+import gemini
 import questions
 import security
 import users
@@ -42,6 +51,10 @@ app.include_router(
 
 app.include_router(
     forum.router
+)
+
+app.include_router(
+    gemini.router
 )
 
 @app.get("/")
