@@ -5,6 +5,7 @@ from fastapi import FastAPI
 # APLICAÇÃO E ROTAS
 # -----------------------------------------------------
 
+import questions
 import security
 import users
 
@@ -32,6 +33,10 @@ app.include_router(
 
 app.include_router(
     security.router
+)
+
+app.include_router(
+    questions.router
 )
 
 @app.get("/")
