@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer'; 
+import { getUserProfile, updateUserProfile } from '../../apiService.js'
 
 const ProfessorPerfil = () => {
     const navigate = useNavigate();
     const [perfil, setPerfil] = useState({
-        nome: '',
-        telefone: '',
+        name: '',
+        phone: '',
         email: '',
         area: '',
-        materias: '',
-        foto: 'https://via.placeholder.com/100'
+        level: '',
     });
 
     useEffect(() => {
-        const perfilSalvo = sessionStorage.getItem("perfilProfessor");
-        if (perfilSalvo) {
-            setPerfil(JSON.parse(perfilSalvo));
-        }
+        const fetchUser = async () => {
+            try {
+                const token = localStorage.getItem('token')
+                const data = await getUserProfile(token);
+                setPerfil(data.user_data);
+            } catch (error) {
+                console.error("Erro ao buscar informação do usuário:", error);
+                alert("Não foi possível carregar suas informações de usuário.");
+            }
+        };
+
+        fetchUser();
     }, []);
 
     const handleChange = (e) => {
@@ -25,22 +33,18 @@ const ProfessorPerfil = () => {
         setPerfil(prevState => ({ ...prevState, [id]: value }));
     };
 
-    const handleFotoChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setPerfil(prevState => ({ ...prevState, foto: event.target.result }));
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
     const handleSubmit = (e) => {
-        e.preventDefault();
-        sessionStorage.setItem("perfilProfessor", JSON.stringify(perfil));
-        alert("Perfil atualizado com sucesso!");
-        navigate('/professor/home');
+        const updateUser = async () => {
+            try {
+                const token = localStorage.getItem('token')
+                await updateUserProfile(token, perfil)
+            } catch (error) {
+                console.error("Erro ao atualizar informação do usuário:", error);
+                alert("Não foi possível atualizar suas informações de usuário.");
+            }
+        };
+
+        updateUser();
     };
 
     return (
@@ -56,36 +60,45 @@ const ProfessorPerfil = () => {
                     <div className="container mt-5">
                         <h3 className="mb-4">Editar Perfil do Professor</h3>
                         <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
-                            <div className="mb-3 text-center">
-                                <img src={perfil.foto}
-                                     className="rounded-circle mb-3"
-                                     style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                                     alt="Pré-visualização do Perfil" />
-                                <input type="file" id="foto" className="form-control" onChange={handleFotoChange} />
-                            </div>
                             <div className="mb-3">
                                 <label htmlFor="nome" className="form-label">Nome</label>
-                                <input type="text" id="nome" className="form-control" placeholder="Digite seu nome" required value={perfil.nome} onChange={handleChange} />
+                                <input type="text" id="name" className="form-control" placeholder={perfil.name} required value={perfil.name} onChange={handleChange} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="telefone" className="form-label">Telefone</label>
-                                <input type="tel" id="telefone" className="form-control" placeholder="(99) 99999-9999" value={perfil.telefone} onChange={handleChange} />
+                                <input type="tel" id="phone" className="form-control" placeholder={perfil.phone} value={perfil.phone} onChange={handleChange} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label">E-mail</label>
-                                <input type="email" id="email" className="form-control" placeholder="professor@email.com" required value={perfil.email} onChange={handleChange} />
+                                <output type="email" id="email" className="form-control">{perfil.email}</output>
                             </div>
-                            <div className="mb-3">
-                                <label htmlFor="area" className="form-label">Área de Ensino</label>
-                                <select id="area" className="form-select" required value={perfil.area} onChange={handleChange}>
-                                    <option value="">Selecione...</option>
-                                    <option value="Ensino Médio">Ensino Médio</option>
-                                    <option value="Graduação">Graduação</option>
-                                </select>
+                            <div className="col-md-6 mb-3 form-group">
+                                    <label htmlFor="teacherArea" className="form-label">Área de Ensino</label>
+                                    <select className="form-select" id="area" required value={perfil.area} onChange={handleChange}>
+                                        <option value="">Selecione sua área</option>
+                                        <option value="matematica">Matemática</option>
+                                        <option value="portugues">Português</option>
+                                        <option value="historia">História</option>
+                                        <option value="geografia">Geografia</option>
+                                        <option value="biologia">Biologia</option>
+                                        <option value="quimica">Química</option>
+                                        <option value="fisica">Física</option>
+                                        <option value="ingles">Inglês</option>
+                                        <option value="artes">Artes</option>
+                                        <option value="educacao-fisica">Educação Física</option>
+                                        <option value="filosofia">Filosofia</option>
+                                        <option value="sociologia">Sociologia</option>
+                                        <option value="outros">Outros</option>
+                                    </select>
                             </div>
-                            <div className="mb-3">
-                                <label htmlFor="materias" className="form-label">Matérias que Leciona</label>
-                                <input type="text" id="materias" className="form-control" placeholder="Ex: Matemática, Física" value={perfil.materias} onChange={handleChange} />
+                            <div className="col-md-6 mb-3 form-group">
+                                    <label htmlFor="teacherLevel" className="form-label">Onde leciona</label>
+                                    <select className="form-select" id="level" required value={perfil.level} onChange={handleChange}>
+                                        <option value="">Selecione o nível</option>
+                                        <option value="ensino-medio">Ensino Médio</option>
+                                        <option value="graduacao">Graduação</option>
+                                        <option value="ambos">Ambos</option>
+                                    </select>
                             </div>
                             <button type="submit" className="btn btn-prim">Salvar Alterações</button>
                         </form>

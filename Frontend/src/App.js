@@ -13,6 +13,7 @@ import SistemaProvas from './pages/professor/SistemaProvas';
 
 // Páginas do Aluno
 import AlunoHome from './pages/aluno/AlunoHome';
+import AlunoPerfil from './pages/aluno/AlunoPerfil.js';
 import BancoQuestoesAluno from './pages/aluno/BancoQuestoesAluno';
 
 // Páginas do Fórum
@@ -56,6 +57,7 @@ function App() {
         <Route element={<AlunoRoute />}>
           {/* Rotas do Aluno */}
           <Route path="/aluno/home" element={<AlunoHome />} /> 
+          <Route path="/aluno/perfil" element={<AlunoPerfil />} />
           <Route path="/aluno/banco-questoes" element={<BancoQuestoesAluno />} />
           <Route path="/aluno/forumAluno" element={<ForumDuvidasAluno />} />
 

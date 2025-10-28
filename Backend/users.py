@@ -14,23 +14,27 @@ router = APIRouter()
 # -----------------------------------------------------
 
 class UserBase(BaseModel):
-    """Schema base com campos comuns."""
-    email: str
+    """ Schema base com campos comuns """
+    name: str
+    phone: str
+    area: Optional[str] = None
+    level: Optional[str] = None
 
 class UserCreate(UserBase):
-    """Schema para receber dados na criação (cadastro)."""
+    """ Schema para receber dados na criação (cadastro) """
+    email: str
     password: str
     user_type: str  # 'student' ou 'teacher'
-    level: Optional[str] = None
-    area: Optional[str] = None
 
 class UserInDB(UserBase):
-    """Schema para como o usuário é armazenado no 'DB'."""
+    """ Schema para como o usuário é armazenado no banco de dados """
+    email: str
     hashed_password: str
-    user_type: str
-    is_active: bool = True
-    level: Optional[str] = None
-    area: Optional[str] = None
+    user_type: str  # 'student' ou 'teacher'
+
+class UserUpdate(UserBase):
+    """ Schema update de usuário """
+    pass
 
 # -----------------------------------------------------
 # FUNÇÕES "HELPER" (Informações Usuários)
@@ -90,11 +94,13 @@ async def register_user(user: UserCreate):
 
     # 3. Cria o objeto do usuário como ele será salvo no "DB"
     user_in_db = UserInDB(
+        name=user.name,
+        phone=user.phone,
         email=user.email,
         hashed_password=hashed_password,
         user_type=user.user_type,
-        level=user.level,
-        area=user.area
+        area=user.area,
+        level=user.level
     )
 
     # 4. "Salva" o usuário no nosso "DB"
@@ -130,3 +136,31 @@ async def read_users_me(current_user: dict = Depends(get_current_user)):
     user_info.pop("hashed_password", None) 
 
     return {"message": "Usuário autenticado com sucesso!", "user_data": user_info}
+
+@router.patch("/users/me")
+async def update_user_me(
+    user_update: UserUpdate, # Recebe os dados do React (JSON)
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Endpoint protegido para atualizar o perfil do usuário logado.
+    Recebe um JSON com os campos a serem atualizados.
+    """
+    
+    # Pega o email do usuário logado (do token)
+    user_email = current_user["email"]
+    
+    # Pega os dados atuais do usuário no "DB"
+    user_in_db = userdb.dummydb[user_email]
+    
+    # Converte os dados recebidos (Pydantic) em um dict
+    # 'exclude_unset=True' só inclui os campos que o React realmente enviou.
+    update_data = user_update.model_dump(exclude_unset=True)
+    
+    # Atualiza as informações
+    user_in_db.update(update_data)
+    userdb.dummydb[user_email] = user_in_db
+    
+    # Retorna o usuário atualizado (sem a senha)
+    user_in_db.pop("hashed_password", None)
+    return user_in_db

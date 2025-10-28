@@ -24,7 +24,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 # -----------------------------------------------------
 
 class Token(BaseModel):
-    """Schema para retornar o Token de acesso."""
+    """ Schema para retornar o Token de acesso """
     access_token: str
     token_type: str
     user_type: str
@@ -34,17 +34,17 @@ class Token(BaseModel):
 # -----------------------------------------------------
 
 def get_password_hash(password):
-    """Cria um hash da senha."""
+    """ Cria um hash da senha """
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed_password.decode('utf-8')
 
 def verify_password(plain_password, hashed_password):
-    """Verifica se a senha plana bate com o hash salvo."""
+    """ Verifica se a senha plana bate com o hash salvo """
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    """Cria o Token JWT."""
+    """ Cria o Token JWT """
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
