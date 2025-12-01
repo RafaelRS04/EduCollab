@@ -10,7 +10,7 @@ EduCollab é uma plataforma web desenvolvida para conectar professores e alunos 
 
 O objetivo do projeto é fornecer ferramentas para que professores possam criar e gerenciar conteúdo educacional, como bancos de questões e provas, enquanto os alunos podem utilizar esses recursos para estudar e testar seus conhecimentos.
 
-## ✨ Funcionalidades Principais
+## Funcionalidades Principais
 
 A plataforma é dividida em duas áreas principais, cada uma com suas próprias funcionalidades:
 
@@ -29,7 +29,7 @@ A plataforma é dividida em duas áreas principais, cada uma com suas próprias 
 * **Banco de Questões para Estudo:** Alunos podem visualizar as questões criadas pelos professores, filtrar por matéria e verificar suas respostas em tempo real, recebendo feedback instantâneo.
 * **Fórum de Dúvidas:** Acesso ao fórum para tirar dúvidas e interagir com colegas e professores.
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 * **Frontend:**
     * [**React.js**](https://reactjs.org/): Biblioteca principal para a construção da interface de usuário.
@@ -43,7 +43,7 @@ A plataforma é dividida em duas áreas principais, cada uma com suas próprias 
     * [**LanguageTool**](https://languagetool.org/): API externa para verificação ortográfica e gramatical no Fórum de Dúvidas.
 
 
-## 🚀 Como Executar o Projeto Localmente
+## Como Executar o Projeto Localmente
 
 Para rodar este projeto em sua máquina, siga os passos abaixo:
 
@@ -68,25 +68,3 @@ Para rodar este projeto em sua máquina, siga os passos abaixo:
     ```bash
     npm start
     ```
-
-
-## 📂 Estrutura de Arquivos
-
-O projeto está organizado da seguinte forma:
-
-```
-Frontend/
-├── public/              # Contém o index.html principal e arquivos estáticos.
-└── src/                 # Contém todo o código-fonte da aplicação React.
-    ├── components/      # Componentes reutilizáveis (Navbar, Footer, ActionCard, etc.).
-    ├── pages/           # Componentes que representam as páginas da aplicação.
-    │   ├── aluno/
-    │   ├── login/
-    │   ├── professor/
-    │   └── forum/
-    ├── App.js           # Roteador principal da aplicação.
-    ├── index.js         # Ponto de entrada da aplicação React.
-    └── *.css            # Arquivos de estilo.
-```
-
-
