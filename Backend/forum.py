@@ -2,20 +2,14 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List
-import users 
+from sqlmodel import Session, select
+import users
+from database import get_session
+from models import Topic, Reply
 
-_teachers_topics: List[dict] = [] 
-_students_topics: List[dict] = [] 
+router = APIRouter(prefix="/forum")
 
-# Crie uma instância do APIRouter
-router = APIRouter(
-    prefix="/forum",
-)
-
-# -----------------------------------------------------
-# MODELOS DE DADOS (SCHEMAS) DO FÓRUM
-# -----------------------------------------------------
-
+# --- SCHEMAS (para interface frontend) ---
 class ReplyBase(BaseModel):
     texto: str
 
@@ -37,104 +31,137 @@ class TopicDisplay(TopicBase):
     data: datetime
     respostas: List[ReplyDisplay] = []
 
-# -----------------------------------------------------
-# ENDPOINTS DO FÓRUM
-# -----------------------------------------------------
+# --- ENDPOINTS ---
 
 @router.get("/topics", response_model=List[TopicDisplay])
 async def get_all_topics(
-    # Só usuários logados podem ver o fórum.
-    current_user: dict = Depends(users.get_current_user) 
+    current_user: users.User = Depends(users.get_current_user),
+    session: Session = Depends(get_session)
 ):
-    """
-    Lista todos os tópicos do fórum.
-    """
-    # Retorna a lista de tópicos (em ordem inversa, mais novo primeiro)
-    if current_user['user_type'] == 'teacher':
-        return sorted(_teachers_topics, key=lambda x: x['data'], reverse=True)
-    else:
-        return sorted(_students_topics, key=lambda x: x['data'], reverse=True)
-
-
+    # Filtra tópicos com base no tipo de usuário (simulando a lógica original de listas separadas)
+    context = 'teacher' if current_user.user_type == 'teacher' else 'student'
+    
+    # Busca tópicos ordenados por data
+    statement = select(Topic).where(Topic.context_type == context).order_by(Topic.data.desc())
+    topics = session.exec(statement).all()
+    
+    # O SQLModel fará o lazy loading das respostas, mas para o schema Pydantic, precisamos garantir
+    # que o campo 'respostas' seja preenchido. O output model cuida da conversão se os nomes baterem.
+    # Mapeamos respostas_db (DB) para respostas (Schema) manualmente se necessário, 
+    # mas aqui usamos list comprehension para formatar.
+    
+    result = []
+    for t in topics:
+        # Converte respostas do DB para Schema
+        replies_display = [
+            ReplyDisplay(
+                id=r.id, autor_nome=r.autor_nome, data=r.data, texto=r.texto
+            ) for r in t.respostas_db
+        ]
+        
+        result.append(TopicDisplay(
+            id=t.id,
+            titulo=t.titulo,
+            conteudo=t.conteudo,
+            autor_nome=t.autor_nome,
+            data=t.data,
+            respostas=replies_display
+        ))
+        
+    return result
 
 @router.post("/topics", response_model=TopicDisplay)
 async def create_new_topic(
-    topic_data: TopicCreate, # Dados vêm do React (JSON)
-    current_user: dict = Depends(users.get_current_user)
+    topic_data: TopicCreate,
+    current_user: users.User = Depends(users.get_current_user),
+    session: Session = Depends(get_session)
 ):
-    """
-    Cria um novo tópico no fórum.
-    O autor é pego automaticamente do token.
-    """
+    autor_nome = current_user.name
+    context = 'teacher' if current_user.user_type == 'teacher' else 'student'
     
-    # Pega o nome do usuário logado
-    autor_nome = current_user.get("name", "Usuário Anônimo")
-
-    # Monta o novo tópico
-    novo_topico = {
-        "id": f"topico-{int(datetime.now().timestamp())}",
-        "titulo": topic_data.titulo,
-        "conteudo": topic_data.conteudo,
-        "autor_nome": autor_nome,
-        "data": datetime.now(),
-        "respostas": []
-    }
+    new_topic = Topic(
+        id=f"topico-{int(datetime.now().timestamp())}",
+        titulo=topic_data.titulo,
+        conteudo=topic_data.conteudo,
+        autor_nome=autor_nome,
+        data=datetime.now(),
+        context_type=context
+    )
     
-    if current_user['user_type'] == 'teacher':
-        _teachers_topics.append(novo_topico)
-    else:
-        _students_topics.append(novo_topico)
-
-    return novo_topico
-
+    session.add(new_topic)
+    session.commit()
+    session.refresh(new_topic)
+    
+    # Retorno compatível com Schema
+    return TopicDisplay(
+        id=new_topic.id,
+        titulo=new_topic.titulo,
+        conteudo=new_topic.conteudo,
+        autor_nome=new_topic.autor_nome,
+        data=new_topic.data,
+        respostas=[]
+    )
 
 @router.get("/topics/{topic_id}", response_model=TopicDisplay)
 async def get_topic_details(
     topic_id: str,
-    current_user: dict = Depends(users.get_current_user)
+    current_user: users.User = Depends(users.get_current_user),
+    session: Session = Depends(get_session)
 ):
-    """
-    Busca os detalhes de um tópico específico pelo ID.
-    """
-
-    if current_user['user_type'] == 'teacher':
-        topico_encontrado = next((t for t in _teachers_topics if t["id"] == topic_id), None)
-    else:
-        topico_encontrado = next((t for t in _students_topics if t["id"] == topic_id), None)
+    context = 'teacher' if current_user.user_type == 'teacher' else 'student'
     
-    if not topico_encontrado:
+    # Busca garantindo que pertença ao contexto correto
+    statement = select(Topic).where(Topic.id == topic_id, Topic.context_type == context)
+    topic = session.exec(statement).first()
+    
+    if not topic:
         raise HTTPException(status_code=404, detail="Tópico não encontrado")
     
-    return topico_encontrado
+    replies_display = [
+        ReplyDisplay(id=r.id, autor_nome=r.autor_nome, data=r.data, texto=r.texto) 
+        for r in topic.respostas_db
+    ]
+
+    return TopicDisplay(
+        id=topic.id,
+        titulo=topic.titulo,
+        conteudo=topic.conteudo,
+        autor_nome=topic.autor_nome,
+        data=topic.data,
+        respostas=replies_display
+    )
 
 @router.post("/topics/{topic_id}/replies", response_model=ReplyDisplay)
 async def add_reply_to_topic(
     topic_id: str,
-    reply_data: ReplyBase, # O React só precisa enviar o texto da resposta
-    current_user: dict = Depends(users.get_current_user)
+    reply_data: ReplyBase,
+    current_user: users.User = Depends(users.get_current_user),
+    session: Session = Depends(get_session)
 ):
-    """
-    Adiciona uma nova resposta a um tópico.
-    """
-
-    if current_user['user_type'] == 'teacher':
-        topico_encontrado = next((t for t in _teachers_topics if t["id"] == topic_id), None)
-    else: 
-        topico_encontrado = next((t for t in _students_topics if t["id"] == topic_id), None)
+    context = 'teacher' if current_user.user_type == 'teacher' else 'student'
+    statement = select(Topic).where(Topic.id == topic_id, Topic.context_type == context)
+    topic = session.exec(statement).first()
     
-    if not topico_encontrado:
+    if not topic:
         raise HTTPException(status_code=404, detail="Tópico não encontrado")
 
-    autor_nome = current_user.get("name", "Usuário Anônimo")
+    autor_nome = current_user.name
     
-    nova_resposta = {
-        "id": f"resp-{int(datetime.now().timestamp())}",
-        "texto": reply_data.texto,
-        "autor_nome": autor_nome,
-        "data": datetime.now()
-    }
+    new_reply = Reply(
+        id=f"resp-{int(datetime.now().timestamp())}",
+        topic_id=topic_id,
+        texto=reply_data.texto,
+        autor_nome=autor_nome,
+        data=datetime.now()
+    )
     
-    # Adiciona a resposta à lista de respostas do tópico
-    topico_encontrado["respostas"].append(nova_resposta)
+    session.add(new_reply)
+    session.commit()
+    session.refresh(new_reply)
     
-    return nova_resposta
+    return ReplyDisplay(
+        id=new_reply.id,
+        autor_nome=new_reply.autor_nome,
+        data=new_reply.data,
+        texto=new_reply.texto
+    )

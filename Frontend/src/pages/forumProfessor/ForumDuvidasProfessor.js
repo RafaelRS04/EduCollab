@@ -137,7 +137,7 @@ const ForumDuvidas = () => {
             <div style={{ flex: '1 0 auto', paddingBottom: '80px' }}>
                 <nav className="navbar navbar-expand-lg">
                     <div className="container">
-                        <Link className="navbar-brand text-white" to="/aluno/home">← Voltar</Link>
+                        <Link className="navbar-brand text-white" to="/professor/home">← Voltar</Link>
                         <span className="navbar-text text-white fw-bold">Fórum de Dúvidas</span>
                     </div>
                 </nav>
@@ -208,7 +208,7 @@ const ForumDuvidas = () => {
                             <p className="text-center text-danger">Erro ao carregar tópicos: {error}</p>
                         ) : posts.length > 0 ? (
                             posts.map(post => (
-                                <Link key={post.id} to={`/aluno/forumAluno/topico/${post.id}`} className="list-group-item list-group-item-action flex-column align-items-start">
+                                <Link key={post.id} to={`/professor/forumProfessor/topico/${post.id}`} className="list-group-item list-group-item-action flex-column align-items-start">
                                     <div className="d-flex w-100 justify-content-between">
                                         <h5 className="mb-1">{post.titulo}</h5>
                                         <small>{post.data}</small>
