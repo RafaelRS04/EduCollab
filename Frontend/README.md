@@ -47,10 +47,7 @@ A plataforma é dividida em duas áreas principais, cada uma com suas próprias 
 
 Para rodar este projeto em sua máquina, siga os passos abaixo:
 
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/RafaelRS04/EduCollab.git](httpsD://github.com/RafaelRS04/EduCollab.git)
-    ```
+1.  **Clone o repositório**
 
 2.  **Navegue até o diretório do projeto:**
     ```bash

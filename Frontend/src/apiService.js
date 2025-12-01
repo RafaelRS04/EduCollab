@@ -1,5 +1,6 @@
-// Define a URL base da sua API
-const API_URL = 'http://127.0.0.1:8000';
+// Tenta pegar do process.env (padrão Create React App)
+// Se não encontrar, usa o localhost como fallback
+const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
 /**
  * Função para fazer Login.
