@@ -67,12 +67,7 @@ Os arquivos `users.py` e `security.py` implementam os seguintes recursos essenci
 
 4.  **Adicionar Gemini API Key e Secret Key:** Num arquivo nomeado `.env`, adicione a chave da API do Gemini e a Secret Key (como em `.env.example`).
 
-5.  **Executar o script de criação do banco:**
-    ```bash
-    python create_db.py
-    ```
-
-6.  **Iniciar o Servidor:**
+5.  **Iniciar o Servidor:**
     ```bash
     uvicorn main:app --reload
     ```
@@ -80,6 +75,6 @@ Os arquivos `users.py` e `security.py` implementam os seguintes recursos essenci
     * `app`: Refere-se à instância `FastAPI()` criada no arquivo.
     * `--reload`: Reinicia o servidor automaticamente após salvar alterações no código.
 
-7.  **Acessar a API:**
+6.  **Acessar a API:**
     * A API estará disponível em: `http://127.0.0.1:8000`
     * A documentação interativa (Swagger UI) estará em: `http://127.0.0.1:8000/docs`
