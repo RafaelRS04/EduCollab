@@ -2,7 +2,7 @@
 
 Este diretório contém o código-fonte do backend da aplicação EduCollab, desenvolvido com o framework FastAPI em Python. A API é responsável pela lógica de negócios, autenticação, autorização e gerenciamento de dados da plataforma.
 
-## 🚀 Funcionalidades Principais
+## Funcionalidades Principais
 
 Os arquivos `users.py` e `security.py` implementam os seguintes recursos essenciais:
 
@@ -31,7 +31,7 @@ Os arquivos `users.py` e `security.py` implementam os seguintes recursos essenci
     * Utiliza `Pydantic` para definir "schemas" (modelos) que validam automaticamente os dados de entrada e saída das requisições, garantindo a integridade dos dados.
     * Configuração de **CORS** (`CORSMiddleware`) para permitir que o frontend React (rodando em `http://localhost:3000`) se comunique com a API (rodando em `http://127.0.0.1:8000`).
 
-## 🛠️ Como Executar
+## Como Executar
 
 1.  **Criar Ambiente Virtual:**
     Certifique-se de ter o Python 3.9+ instalado. No terminal, dentro desta pasta, execute:
@@ -63,10 +63,16 @@ Os arquivos `users.py` e `security.py` implementam os seguintes recursos essenci
     * `PyJWT[cryptography]`: Para criação e verificação de tokens JWT (autenticação).
     * `python-multipart`: Utilizado pelo FastAPI para processar uploads de arquivos.
     * `google-generativeai`: Integração com o Google Gemini.
+    * `sqlmodel`: Integração com banco de dados (`sqlite`).
 
-4.  **Adicionar Gemini API Key:** Num arquivo nomeado `.env`, adicione a chave da API do Gemini (como em `.env.example`).
+4.  **Adicionar Gemini API Key e Secret Key:** Num arquivo nomeado `.env`, adicione a chave da API do Gemini e a Secret Key (como em `.env.example`).
 
-5.  **Iniciar o Servidor:**
+5.  **Executar o script de criação do banco:**
+    ```bash
+    python create_db.py
+    ```
+
+6.  **Iniciar o Servidor:**
     ```bash
     uvicorn main:app --reload
     ```
@@ -74,11 +80,6 @@ Os arquivos `users.py` e `security.py` implementam os seguintes recursos essenci
     * `app`: Refere-se à instância `FastAPI()` criada no arquivo.
     * `--reload`: Reinicia o servidor automaticamente após salvar alterações no código.
 
-6.  **Acessar a API:**
+7.  **Acessar a API:**
     * A API estará disponível em: `http://127.0.0.1:8000`
     * A documentação interativa (Swagger UI) estará em: `http://127.0.0.1:8000/docs`
-
-## ⚠️ Atenção
-
-* **Banco de Dados:** Atualmente, os dados dos usuários são armazenados em um dicionário Python em memória. Isso é **apenas para desenvolvimento e teste**. Para produção, ele **deve** ser substituído por um banco de dados real (ex: PostgreSQL, MongoDB).
-* **SECRET_KEY:** A chave secreta (`SECRET_KEY`) usada para assinar os tokens JWT no código é um exemplo. Em produção, ela **deve** ser substituída por uma chave forte e gerenciada de forma segura (ex: variáveis de ambiente).

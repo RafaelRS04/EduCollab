@@ -3,164 +3,109 @@ from datetime import timedelta
 from pydantic import BaseModel
 from typing import Optional
 import security
-import userdb
 import jwt
+from sqlmodel import Session, select
+from database import get_session
+from models import User, UserBase
 
-# Crie uma instância do APIRouter
 router = APIRouter()
 
-# -----------------------------------------------------
-# MODELOS DE DADOS (SCHEMAS)
-# -----------------------------------------------------
-
-class UserBase(BaseModel):
-    """ Schema base com campos comuns """
-    name: str
-    phone: str
-    area: Optional[str] = None
-    level: Optional[str] = None
-
+# --- SCHEMAS DE ENTRADA/SAÍDA (Mantendo compatibilidade) ---
 class UserCreate(UserBase):
-    """ Schema para receber dados na criação (cadastro) """
     email: str
     password: str
-    user_type: str  # 'student' ou 'teacher'
-
-class UserInDB(UserBase):
-    """ Schema para como o usuário é armazenado no banco de dados """
-    email: str
-    hashed_password: str
-    user_type: str  # 'student' ou 'teacher'
+    user_type: str
 
 class UserUpdate(UserBase):
-    """ Schema update de usuário """
     pass
 
-# -----------------------------------------------------
-# FUNÇÕES "HELPER" (Informações Usuários)
-# -----------------------------------------------------
-
-async def get_current_user(token: str = Depends(security.oauth2_scheme)):
-    """
-    Dependência para obter o usuário atual a partir do token JWT.
-    Decodifica o token, valida o usuário e retorna seus dados.
-    """
-    # Exceção padrão para erros de credencial
+# --- FUNÇÕES HELPER ---
+async def get_current_user(
+    token: str = Depends(security.oauth2_scheme),
+    session: Session = Depends(get_session)
+):
     credentials_exception = HTTPException(
         status_code=401,
         detail="Não foi possível validar as credenciais",
         headers={"WWW-Authenticate": "Bearer"},
     )
-
     try:
-        # Tenta decodificar o token
         payload = jwt.decode(token, security.SECRET_KEY, algorithms=[security.ALGORITHM])
-        email: str = payload.get("sub") # 'sub' é o email que salvamos no token
+        email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
     except jwt.PyJWTError:
-        # Se o token for inválido (expirado, assinatura errada, etc.)
         raise credentials_exception
 
-    # Busca o usuário no "DB" para garantir que ele existe
-    user = userdb.dummydb.get(email)
+    # Busca no SQLite
+    user = session.get(User, email)
     if user is None:
         raise credentials_exception
-
-    # Retorna os dados do usuário (como um dicionário)
+    
+    # Retorna objeto User (SQLModel) que se comporta como dict/Pydantic
     return user
 
-# -----------------------------------------------------
-# ENDPOINTS RELACIONADOS AOS USUÁRIOS
-# -----------------------------------------------------
-
+# --- ENDPOINTS ---
 @router.post("/register", response_model=security.Token)
-async def register_user(user: UserCreate):
-    """
-    Endpoint para cadastrar um novo usuário.
-    Recebe os dados do usuário, salva no 'DB' e retorna um security.Token de login.
-    """
-    
-    # 1. Verifica se o usuário já existe no nosso "DB"
-    if user.email in userdb.dummydb:
-        # 400 Bad Request: O cliente enviou dados inválidos (email duplicado)
-        raise HTTPException(
-            status_code=400,
-            detail="O email já está cadastrado."
-        )
+async def register_user(
+    user_data: UserCreate, 
+    session: Session = Depends(get_session)
+):
+    # Verifica se existe
+    existing_user = session.get(User, user_data.email)
+    if existing_user:
+        raise HTTPException(status_code=400, detail="O email já está cadastrado.")
 
-    # 2. Criptografa a senha
-    hashed_password = security.get_password_hash(user.password)
+    hashed_password = security.get_password_hash(user_data.password)
 
-    # 3. Cria o objeto do usuário como ele será salvo no "DB"
-    user_in_db = UserInDB(
-        name=user.name,
-        phone=user.phone,
-        email=user.email,
+    # Cria instância do modelo DB
+    db_user = User(
+        name=user_data.name,
+        phone=user_data.phone,
+        email=user_data.email,
         hashed_password=hashed_password,
-        user_type=user.user_type,
-        area=user.area,
-        level=user.level
+        user_type=user_data.user_type,
+        area=user_data.area,
+        level=user_data.level
     )
 
-    # 4. "Salva" o usuário no nosso "DB"
-    userdb.dummydb[user.email] = user_in_db.model_dump()
-    
-    print("Novo usuário cadastrado:", userdb.dummydb[user.email])
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
 
-    # 5. Cria um security.Token de acesso para o usuário
-    access_token_expires = timedelta(minutes=security.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = security.create_access_token(
-        data={"sub": user.email, "user_type": user.user_type},
-        expires_delta=access_token_expires
+        data={"sub": db_user.email, "user_type": db_user.user_type}
     )
 
-    # 6. Retorna o Token
     return {
         "access_token": access_token, 
         "token_type": "bearer",
-        "user_type": user.user_type
+        "user_type": db_user.user_type
     }
 
 @router.get("/users/me")
-async def read_users_me(current_user: dict = Depends(get_current_user)):
-    """
-    Endpoint protegido.
-
-    Só pode ser acessado por um usuário com um token válido.
-    Retorna as informações do usuário que está logado.
-    """
-
-    # Por segurança, remove o hash da senha antes de retornar
-    user_info = current_user.copy()
-    user_info.pop("hashed_password", None) 
-
+async def read_users_me(current_user: User = Depends(get_current_user)):
+    # Converte para dict para manipular campos
+    user_info = current_user.model_dump()
+    user_info.pop("hashed_password", None)
     return {"message": "Usuário autenticado com sucesso!", "user_data": user_info}
 
 @router.patch("/users/me")
 async def update_user_me(
-    user_update: UserUpdate, # Recebe os dados do React (JSON)
-    current_user: dict = Depends(get_current_user)
+    user_update: UserUpdate,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
 ):
-    """
-    Endpoint protegido para atualizar o perfil do usuário logado.
-    Recebe um JSON com os campos a serem atualizados.
-    """
+    user_data = user_update.model_dump(exclude_unset=True)
     
-    # Pega o email do usuário logado (do token)
-    user_email = current_user["email"]
+    # Atualiza campos do objeto atual
+    for key, value in user_data.items():
+        setattr(current_user, key, value)
+
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
     
-    # Pega os dados atuais do usuário no "DB"
-    user_in_db = userdb.dummydb[user_email]
-    
-    # Converte os dados recebidos (Pydantic) em um dict
-    # 'exclude_unset=True' só inclui os campos que o React realmente enviou.
-    update_data = user_update.model_dump(exclude_unset=True)
-    
-    # Atualiza as informações
-    user_in_db.update(update_data)
-    userdb.dummydb[user_email] = user_in_db
-    
-    # Retorna o usuário atualizado (sem a senha)
-    user_in_db.pop("hashed_password", None)
-    return user_in_db
+    result = current_user.model_dump()
+    result.pop("hashed_password", None)
+    return result
