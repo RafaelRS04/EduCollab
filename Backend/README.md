@@ -29,7 +29,7 @@ Os arquivos `users.py` e `security.py` implementam os seguintes recursos essenci
 
 4.  **Estrutura e Validação:**
     * Utiliza `Pydantic` para definir "schemas" (modelos) que validam automaticamente os dados de entrada e saída das requisições, garantindo a integridade dos dados.
-    * Configuração de **CORS** (`CORSMiddleware`) para permitir que o frontend React (rodando em `http://localhost:3000`) se comunique com a API (rodando em `http://127.0.0.1:8000`).
+    * Configuração de **CORS** (`CORSMiddleware`) para permitir que o frontend React se comunique com a API.
 
 ## Como Executar
 
